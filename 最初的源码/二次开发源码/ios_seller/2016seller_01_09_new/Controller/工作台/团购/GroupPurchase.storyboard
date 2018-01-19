@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Group Purchase Verify View Controller-->
+        <scene sceneID="MQj-9t-nvW">
+            <objects>
+                <viewController storyboardIdentifier="groupPurchaseVerify" id="4fZ-it-RtY" customClass="GroupPurchaseVerifyViewController" customModule="_015b2b2cseller" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="t2J-XR-TEx"/>
+                        <viewControllerLayoutGuide type="bottom" id="8YD-54-rwy"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1a1-zT-f38">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入团购验证码" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PCl-sO-M2q">
+                                <rect key="frame" x="0.0" y="40" width="320" height="67"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="67" id="OVV-Ga-DFV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="PCl-sO-M2q" firstAttribute="leading" secondItem="1a1-zT-f38" secondAttribute="leading" id="mgV-03-KRo"/>
+                            <constraint firstItem="PCl-sO-M2q" firstAttribute="top" secondItem="t2J-XR-TEx" secondAttribute="bottom" constant="20" id="rOx-N9-bDX"/>
+                            <constraint firstAttribute="trailing" secondItem="PCl-sO-M2q" secondAttribute="trailing" id="xcv-cP-U7e"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="resultTextField" destination="PCl-sO-M2q" id="aFF-6O-ZFD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Iyw-PG-oPz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="691" y="421"/>
+        </scene>
+    </scenes>
+</document>

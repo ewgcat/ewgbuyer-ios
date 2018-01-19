@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "1c65971c-eb1b-7b4b-a25f-1e01b783bd0b++291",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "1c65971c-eb1b-7b4b-a25f-1e01b783bd0b++291" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1c65971c-eb1b-7b4b-a25f-1e01b783bd0b++291" : 9223372036854775807,
+    "6CFC87E5E1BFF98C1BFC27E73352AA004F3802E5" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "8B72B050-93EB-45F7-9239-3563FC96626D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1c65971c-eb1b-7b4b-a25f-1e01b783bd0b++291" : "%E6%94%AF%E6%8C%81xcode8%E7%9A%84app\/",
+    "6CFC87E5E1BFF98C1BFC27E73352AA004F3802E5" : "%E6%94%AF%E6%8C%81xcode8%E7%9A%84app\/ios_buyer_new\/iOS_buyer%202\/General\/CustomActionSheet\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "My_App",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ios_buyer_new\/iOS_buyer 2\/My_App.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/dev.eovip.com:9999\/svn\/ios_buyer",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1c65971c-eb1b-7b4b-a25f-1e01b783bd0b++291"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/JJson\/CustomActionSheet.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6CFC87E5E1BFF98C1BFC27E73352AA004F3802E5"
+    }
+  ]
+}

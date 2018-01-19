@@ -1,0 +1,524 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#endif
+
+#define ScreenFrame [[UIScreen mainScreen]bounds]
+#define UIDeviceHao [[[UIDevice currentDevice] systemVersion]floatValue]
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+#define NAV_COLOR(X) [[UINavigationBar appearance] setBarTintColor:X]
+#define LINE_COLOR UIColorFromRGB(0xcecece)
+#define RGB_COLOR(R,G,B) [UIColor colorWithRed:R/255.0f green:G/255.0f blue:B/255.0f alpha:1]
+
+#define UISCREEN_FRAME @"[[UIScreen mainScreen]bounds]"
+#define VERIFY @"verify"
+#define balance_pay @"预存款支付"
+#define after_pay @"货到付款"
+#define chat_pay @"微信支付"
+#define online_mark @"alipay_app"
+#define balance_mark @"balance"
+#define after_mark @"payafter"
+#define weixin_mark @"wx_app"
+#define unionpay_mark @"unionpay"
+#define USERNAMEREGI @"userName"
+#define MOBILEREGI @"mobile"
+
+
+//需要修改的可以是 UmengAppkey   WXAppId  __TencentDemoAppid_
+#define UmengAppkey @"575d55fde0f55a3291002abe"
+
+//原来的的WXAppId
+
+//#define WXAppId @"wx4b3df472a8cd8a2e"
+
+//e网购的WXAppId
+//#define WXAppId @"wx8789eb9c0011a20f"
+#define WXAppId @"wxc7a4cad1056db27c"
+
+
+
+
+#define __TencentDemoAppid_  @"1105441034"
+#define PreDefM_APPID @"1104845397"
+#define TencentSchemes  @"tencent1105441034"
+
+#define kAppKey         @"3116549014"
+#define wbSchemes       @"wb3116549014"
+#define kRedirectURI    @"https://api.weibo.com/oauth2/default.html"
+
+#define UPSchemes       @"UPPayDemo"
+
+//http://www.sina.com
+#define SEVEN_HEIGHT ScreenFrame.size.width*340/650
+#define SIX_HEIGHT ScreenFrame.size.width*317/650
+
+//缓存
+#define SECTION_COUNT_CACHE @"sectionCountCacheForFirstViewController"
+
+#define WXPAY_URL @"/app/pay/wx_pay.htm"//String id 订单id  String type
+#define WXPAY_BACKURL @"/app/wxpay_return.htm"//String id, String user_id
+#define WXPAY_INTERGRAL_BACKURL @"/app/buyer/integral_wxpay_return.htm"//String id, String user_id
+
+#define USER_INFORMATION [[NSArray alloc] initWithContentsOfFile:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"information.txt"]]
+#define INFORMATION_FILEPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"information.txt"]
+#define HOMEPAGE_INFORMATION(X) [[NSArray alloc] initWithContentsOfFile:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:X]]
+#define HOMEPAGE_INFORMATION_FILEPATH(X) [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:X]
+
+#pragma mark - 首页
+#define LAUNCH_AD_URL @"/app/launch_ad.htm"
+#define INDEX_AD_URL @"/app/index_ad.htm"
+#define INDEX_NAV_URL @"/app/index_nav.htm"
+#define INDEX_FLOOR_URL @"/app/index_floor.htm"
+#define INDEX_AD_CLICK_URL @"/app/index_ad_click.htm"
+#pragma mark - 接口宏定义
+//*****************************URL***********************************
+// @"http://192.168.0.149:8080" @"http://mall.eovip.com"
+//http://192.168.0.147:8089/mall   @"http://eovip.vicp.net"
+//@"http://192.168.0.116:8089/mall"@"http://192.168.0.119:8080"
+//@"http://www.ewgvip.com"
+//@"http://192.168.0.138:8080"   @"http://192.168.0.126:8080"
+//"http://12306.iok.la  @"http://192.168.0.126:8080".
+//@"http://192.168.0.108:80"
+//@"http://192.168.0.109:80"
+#if DEV
+
+#define FIRST_URL     @"http://www.ewgvip.com"
+
+
+#else
+
+#define FIRST_URL   @"http://www.ewgvip.com"
+
+
+#endif
+
+/*
+ @"http://192.168.1.237:8088"
+ @"http://www.minichaoshi.com" 测试站
+ @"http://192.168.1.222:8080/cloud" 张晶
+ @"http://192.168.1.238" 李晓阳
+ @"http://192.168.1.236:8082/"
+ @"http://192.168.1.215:90"
+ @"http://192.168.1.238:8081"
+ @"http://192.168.1.200"
+ @"http://b2b2c.iskyshop.com" 外网
+ @"http://192.168.1.209:90"
+ @"http://192.168.1.236:8081"
+ */
+#define GETFILTER_URL @"/app/getfilter.htm"
+#define APP_VERIFY_URL @"/app_verify.htm"
+#define GETUSERMSG_URL @"/app/getUserMsg.htm"
+#define SAVEUSER_URL @"/app/saveUser.htm"
+#define GOODS_CART2_URL @"/app/goods_cart2.htm"
+#define GOODS_CART2_DELIVERY_URL @"/app/goods_cart2_delivery.htm"
+
+//签到
+#define GET_SIGN_STATUS_URL @"/app/get_sign_status.htm"
+#define SIGNINTEGRAL_URL @"/app/sign_integral.htm"
+
+#define GETALLACTIVITYNAV_URL @"/app/getAllActivityNav.htm"
+#define GETACTIVITYGOODS_URL @"/app/getActivityGoods.htm"
+//判断云购是否开启
+#define CLOUDPURCHASESTATUS_URL @"/app/index_cloudbuy_status.htm"
+
+
+//*****************************店铺相关接口*****************************
+#define STORE_INFO_URL @"/app/store.htm"//店铺首页 参数store_id 返回商品详情 goods_data
+#define STORE_PRIVATE_URL @"/app/store_info.htm" //参数store_id 返回店铺logo 粉丝数 收藏数
+
+
+//*****************************推送***********************************
+#define PUSH_URL @"/app/push_bind.htm"//deviceToken type=iOS user_id
+#define SIGNOUT_URL @"/app/push_unbind.htm"// user_id
+
+//*****************************忘记密码***********************************
+#define FORGET_URL @"/app/forget1.htm"
+
+//*****************************扫码登陆***********************************
+#define SCAN_LOGIN_URL @"/app/buyer/app_qr_login.htm"//qr_id
+
+//*****************************组合商品Detail***********************************
+#define COMBINATION_URL @"/app/get_goods_suits.htm"//参数id，商品id
+#define COMBINATION_PARTS_URL @"/app/get_goods_parts.htm"//参数id，商品id
+
+//*****************************店铺列表借口***********************************
+#define STORE_URL @"/app/store.htm"//参数id（店铺id），返回店铺信息
+#define STOREGOODS_URL @"/app/store_goods.htm"//参数id（店铺id），返回店铺商品信息
+#define SHOPLIST_URL @"/app/store_list.htm"
+#define ZERO_LIST_URL @"/app/free_index.htm"
+#define ZERO_LIST_CLASSIFY_URL @"/app/freeclass.htm"
+#define ZERO_DETAIL_URL @"/app/free_view.htm"
+#define ZERO_DETAIL_SUPPLY_URL @"/app/free_apply_save.htm"
+#define ZERO_DETAIL_ESTIMATE_URL @"/app/free_logs.htm"//评价列表   id  String begincount, String selectcount
+#define ZERO_SUPPLY_VALIDATE_URL @"/app/free_apply.htm"//申请前验证
+#define ZERO_DETAIL_INTRODUCE_URL @"/app/free_introduce.htm"//详情介绍 id
+#define GIFT_URL @"/app/add_cart_gift.htm"//满就送赠品选择：参数cart_ids这一组被选中的购物车id逗号分隔 gift_id赠品id 返回ret 100成功
+#define ACTIVUTY_LIST_URL @"/app/activity_index.htm"
+#define CARTSPECSAVE_URL @"/app/goods_cart1_spec_save.htm"// 购物车修改商品规格 String gsp, String id,String user_id, String token, String cart_mobile_ids
+//*****************************退货管理*****************************
+#define BUYER_RETURN_LIST_URL @"/app/buyer/goods_return.htm"//参数user_id, String token，begin_count，不加任何参数begin_count时，默认查询10个订单的所有数据，下拉刷新时传begin_count分别为10、20、30.。。
+#define BUYER_RETURN_GOODSAPPLY_URL @"/app/buyer/goods_return_apply.htm"//参数goods_id, oid（订单id）,goods_gsp_ids, user_id, token
+#define BUYER_RETURN_GOODSSUPPLY_SAVE_URL @"/app/buyer/goods_return_apply_save.htm"//参数：oid（订单id）,return_goods_content（退货申请内容）, String return_goods_count（退货数量），goods_id, user_id,token
+#define BUYER_RETURN_GOODS_CANCEL_SAVE_URL @"/app/buyer/goods_return_cancel_save.htm"//参数：oid（订单id）, goods_id , goods_gsp_ids, user_id, token
+#define GOODS_RETURN_SHIP_URL @"/app/buyer/goods_return_ship.htm"//参数 oid,  user_id，token,goods_id  普通商品退货填写物流单号（退货订单）
+#define GOODS_RETURN_SHIP_SAVE_URL @"/app/buyer/goods_return_ship_save.htm"//参数rid, user_id, express_id（物流公司id）, express_code（物流单号）
+#define GOODS_ORDER_REFUND_URL @"/app/buyer/order_form_refund.htm"
+
+//*****************************生活购订单退货*****************************
+#define GROUPLIFE_RETURN_URL @"/app/buyer/grouplife_refund.htm"//参数user_id, token，begin_count，不加任何参数begin_count时，默认查询10个订单的所有数据，下拉刷新时传begin_count分别为10、20、30.。。
+#define GROUPLIFE_RETURN_APPLY_URL @"/app/buyer/grouplife_refund_apply.htm"//参数group_id，user_id, token
+#define GROUPLIFE_RETURN_APPLY_SAVE_URL @"/app/buyer/grouplife_refund_apply_save.htm"//参数group_id, user_id,token，return_content（用户自己填写的退款原因）, return_reasion（用户选择退款原因）
+
+//*****************************生活够订单列表*****************************
+#define GROUPLIFE_ORDERLIST_URL @"/app/buyer/grouplife_order.htm"//参数user_id, token，begin_count，不加任何参数begin_count时，默认查询10个订单的所有数据，下拉刷新时传begin_count分别为10、20、30.。。
+#define GROUPLIFE_ORDERDETAIL_URL @"/app/buyer/grouplife_order_detail.htm"//参数user_id, token，oid
+#define GROUPLIFE_ORDERCANCEL_URL @"/app/buyer/grouplife_order_cancel.htm"//参数user_id, token，oid
+#define GROUPORDERSAVE_URL @"/app/group_life_order_save.htm" //提交订单
+
+//*****************************积分商品订单列表*****************************
+#define INTEGRAL_ORDERLIST_URL @"/app/buyer/integral_order.htm"//参数user_id, token，begin_count，不加任何参数begin_count时，默认查询10	个订单的所有数据，下拉刷新时传begin_count分别为10、20、30.。。
+#define INTEGRAL_ORDERCANCEL_URL @"/app/buyer/integral_order_cancel.htm"//参数：oid（订单id）,  user_id, token
+#define INTEGRAL_ORDERDETAIL_URL @"/app/buyer/integral_order_detail.htm"//String oid
+#define INTEGRAL_ORDERENSUREGOODS_URL @"/app/buyer/integral_order_complete.htm"//String oid
+#define integral_order_pay_URL @"/app/buyer/integral_order_pay_balance.htm"//String order_id, String user_id,    String token
+#define INTEGRALINTRODUCE_URL @"/app/integral_introduce.htm" //详情介绍
+
+//*****************************0元购订单列表*****************************
+#define FREE_ORDERLIST_URL @"/app/buyer/free_order.htm"//参数user_id, token，begin_count，不加任何参数begin_count时，默认查询10	个订单的所有数据，下拉刷新时传begin_count分别为10、20、30.。。
+#define FREE_ORDERDETAIL_URL @"/app/buyer/free_order_detail.htm"//参数oid（订单id）, user_id, token
+#define FREE_ESTIMATE_URL @"/app/buyer/free_order_evaluate_save.htm"//数 oid, use_experience（评论语句）, user_id，token,
+
+//*****************************店铺相关接口*****************************
+#define STORE_FIRST_URL @"/app/store_index.htm" //店铺首页 参数store_id
+#define STORE_LIST_URL @"/app/goods_list.htm"//列表  把 store_id 加上就行
+#define STORE_ADDNEW_URL @"/app/store_new_arrival.htm" // 店铺首页上新的接口
+#define STORE_COLLECT_URL @"/app/add_store_favorite.htm" // 店铺收藏接口 上传user_id user_id 返回 0：收藏成功；1：操作失败，已经收藏过;
+#define STORE_ALLGOODS_URL @"/app/goods_list.htm" // 店铺全部商品
+/*String  orderBy：商品列表查询时的排序方式
+String  orderType：商品列表排序顺序，“desc”或者“asc”
+String  selectCount：查询开始位置
+String  gc_id：商品分类id
+String  gb_id：商品品牌id
+String  keyword：搜索关键字
+String  queryType：预留参数
+String  store_id：店铺id
+返回：code：true有数据
+goods_list：List<Map>,商品信息列表
+id：商品id
+goods_name：商品名称
+goods_current_price：商品当前价格
+goods_salenum：商品销量
+goods_main_photo：商品图片
+evaluate：商品好评*/
+//*****************************聊天相关接口*****************************
+// 上传聊天内容
+#define CHAT_BUYER_URL @"/app/buyer/chatting_logs_send.htm"//，参数 user_id, token, chatting_content（聊天内容）, goods_id（咨询的商品id）
+// 从服务器刷新聊天内容
+#define CHAT_BUYER_REFRESH_URL @"/app/buyer/chatting_logs_refresh.htm"//,参数参数 user_id, token, goods_id（咨询的商品id）
+#define CHAT_BUYER_SEND_URL @"/app/buyer/chatting_distribute.htm"
+
+//*****************************F码*****************************
+#define FCODE_URL @"/app/add_f_code_goods_cart.htm"//String f_code,String goods_id,  String gsp, String user_id, String token, String cart_mobile_ids, String price
+
+//*****************************商品详情Detail*****************************
+#define DETAIL_URL @"/app/goods.htm"
+#define DETAIL_URL2 @"/app/goods_introduce.htm"
+#define SPECIFICATIONS_URL @"/app/goods_specs.htm"// 参数id
+#define REGION_URL @"/app/area_load.htm"//参数id，无参数时查询顶级地区
+#define SPECIFICATIONSBACK_URL @"/app/load_goods_gsp.htm"//参数 gsp（规格id，格式：32,54）, id（商品id）
+#define ATTENTION_URL @"/app/goods_favorite_save.htm"//参数goods_id, user_id,token     返回code：100操作成功，-500请求错误，-400用户信息错误，-300已经关注过该商品
+#define TRANS_FEE_URL @"/app/goods_trans_fee.htm"//参数current_city（当前城市名称）, goods_id
+#define ADDCAR_URL @"/app/add_goods_cart.htm"//参数user_id, token,cart_mobile_ids, goods_id, count（数量）, price（价钱）,gsp（规格格式：99,96,）
+#define MEMBERPRICE_URL @"/app/query_goodsActivity_price.htm"
+#define ASSESS_URL @"/app/goods_evaluate.htm"//参数id（商品id），type（1:好评，0中评，-1差评，没有值是查询所有评价）,beginCount, selectCount
+#define EVA_ADD_URL @"/app/buyer/evaluate_list.htm"//已完成订单修改/删除/追加评价列表请求
+#define EVA_DETAIL_URL @"/app/buyer/evaluate_detail.htm"//评价详情
+#define EVA_DEL_URL @"/app/buyer/evaluate_del.htm"//用户评价删除
+#define EVA_MODIFY_URL @"/app/buyer/evaluate_modify.htm" //用户评价修改
+#define EVA_APPEND_URL @"/app/buyer/evaluate_add.htm" //用户评价追加
+#define CONSULT_URL @"/app/goods_consult.htm"//参数id，beginCount，selectCount
+#define ISSUANCE_URL @"/app/goods_consult_save.htm"//"/参数goods_id, user_id,token, content（咨询内容）"发布商品咨询信息
+#define MAYLIKE_URL @"/app/like_goods_list.htm"//商品详情底部“你可能喜欢的商品”列表  参数id（商品id）
+#define ESAYPAY_URL @"/app/goods_cart0.htm"//  轻松购接口，参数为“商品详情”中添加购物车接口的所有参数，返回json为“订单”中购物车提交订单请求接口的的返回值，
+#define CARGOODS_COUNT @"/app/goods_cart_count.htm"//购物车中商品数量,参数user_id token cart_mobile_ids 返回值 count
+#define AFTERSUPPLY_COUNT @"/app/query_payment_payafter.htm"//参数goods_ids，商品id，使用逗号间隔,若订单商品不支持货到付款，给出相应提示“该订单部分商品不支持货到付款”
+#define PUBLISHLIST_URL @"/app/buyer/goods_order_evaluate_query.htm"//商品评价列表
+#define AREA_URL @"/app/group_area.htm" //地区选择
+
+//*****************************登陆、注册、个人中心*****************************
+#define MY_CONSULT_URL @"/app/buyer/consult.htm" //app用户中心咨询列表 user_id:用户id beginCount:开始脚标 SelectCount:结束脚标 reply:是否已回复 true or  false
+#define HASPHONE_URL @"/app/buyer/hasphone.htm" //验证手机
+#define REGISTER_URL @"/app/register_finish.htm?type=ios"
+#define REGISTERAGREE_URL @"/app/register_doc.htm"
+#define USER_CENTER_URL @"/app/buyer/index.htm"
+#define VERIFYUSERNAME_URL @"/app/ios_verify_username.htm"
+#define LOGIN_URL @"/app/iskyshop_user_login.htm"
+#define REGISTERPHONE_URL @"/app/send_register_code.htm" //手机注册发送验证码
+#define REGISTERFINISH_URL @"/app/register_finish.htm" //新增参数type="mobile"，参数mobile为手机号，参数verify_code为注册码 返回：code = 100;// 100注册成功，-100，手机注册时验证码错误，-200用户名已存在
+#define VERIFYCODE_URL @"/app/buyer/verifyCode_send.htm"//获取验证码
+//*****************************云购*****************************
+#define CLOUDPURCHASE_NEW_WINNER_URL @"/app/cloudpurchase_announced.htm"//最新揭晓
+#define CLOUDPURCHASE_CLASS_URL @"/app/cloudpurchase_class_list.htm"//云购分类
+#define CLOUDPURCHASE_GOODSLIST_URL @"/app/cloudpurchase_goods_list.htm"//云购商品列表
+#define CLOUDPURCHASE_SEARCH_URL @"/app/cloudpurchase_goods_search.htm"//搜索商品
+#define CLOUDPURCHASE_GOODSDETAIL_URL @"/app/cloudpurchase_lottery.htm"//云购商品详情
+#define CLOUDPURCHASE_GOODSDETAIL_TIMEUP_URL @"/cloudbuy/getresult.htm"//云购商品开奖请求
+
+#define CLOUDPURCHASE_GOODSDETAILCURRENT_URL @"/app/cloudpurchase_current_lottery.htm"//云购商品最新详情
+#define CLOUDPURCHASE_GOODSDETAIL_RECORD_URL @"/app/buyer/cloudpurchase/lottery_record.htm"//云购商品详情购买记录
+#define CLOUDPURCHASE_GOODSDETAIL_SELFRECORD_URL @"/app/buyer/cloudpurchase/lottery_self_record.htm"//云购商品详情自己的购买记录
+#define CLOUDPURCHASE_GOODSDETAIL_PICTURE_URL @"/app/cloudpurchase/goods_introduce.htm"//云购图文详情
+
+#define CLOUDPURCHASE_ADD_CART_URL @"/app/buyer/cloudpurchase/cart_add.htm"//添加购物车
+#define CLOUDPURCHASE_CHECK_CART_URL @"/app/buyer/cloudpurchase/cart_list.htm"//查看购物车内容
+#define CLOUDPURCHASE_CART_MODIFY_URL @"/app/buyer/cloudpurchase/cart_modify.htm"//购物车数量调整
+#define CLOUDPURCHASE_CART_DEL_URL @"/app/buyer/cloudpurchase/cart_del.htm"//购物车删除
+#define CLOUDPURCHASE_SUBMIT_ORDER_URL @"/app/buyer/cloudpurchase/submitOrder.htm"//云购提交订单
+#define CLOUDPURCHASE_CLOUDPURCHASERECORD_LIST_URL @"/app/buyer/cloudpurchase/cloudPurchaseRecord_list.htm"//云购夺宝记录
+#define CLOUDPURCHASE_ADDRESS_SAVE_URL @"/app/cloudpurchase_address_save.htm"//云购发货地址
+#define CLOUDPURCHASE_DELIVERY_STATUS_URL @"/app/cloudpurchase_delivery_status.htm"//云购确认收货
+
+#define CLOUDPURCHASE_WINNER_HISTORY_URL @"/app/buyer/cloudpurchase/history.htm"//往期揭晓
+#define CLOUDPURCHASE_LATEST_50_URL @"/app/cloudpurchase/getLatest50.htm"//最近50条
+
+//*****************************购物车*****************************
+#define CART_PRICE_URL @"/app/compute_cart.htm"
+#define MYCAR_URL @"/app/goods_cart1.htm"//购物车列表  参数user_id, token,cart_mobile_ids,cart_mobile_ids没有时传空值，
+#define MYCARCOUNT_URL @"/app/cart_count_adjust.htm"// 购物车商品数量调整 参数cart_id（购物车id）, count（数量）,user_id, token, cart_mobile_ids  100表示修改成功，200表示库存不足,300表示优惠库存不足
+#define DELETECAR_URL @"/app/remove_goods_cart.htm" //删除购物车商品参数 cart_ids（购物车对应id）, user_id, token，cart_mobile_ids返回100表示删除成功，200表示删除失败，total_price购物车总价格，count购物车数量
+#define BUYLIST_URL @"/app/goods_cart2_goodsInfo.htm" //手机端提交订单页商品清单参数cart_ids
+#define CARFEE_URL @"/app/goods_cart2_cartsTrans.htm"//根据购物车获得相应的物流运费模板 参数cart_ids（订单中商品id，以逗号间隔）, addr_id（选择的收货地址id）,store_ids该订单中所有店铺id
+#define UPDINGDAN_URL @"/app/goods_cart3.htm"//提交订单请求 参数user_id, token,store_id, addr_id, cart_ids,order_type（安卓端值为“android”,苹果端值为ios）, payType（支付方式），trans_+店铺id，配送方式，店铺id为调用/mobile/goods_cart2_cartsTrans.htm接口时返回的store_id， ship_price_+店铺id，运费 invoiceType（发票类型），invoice（发票信息）
+#define COUPONLIST_URL @"/app/goods_cart2_coupon.htm"//参数user_id, token,store_ids,order_goods_price(订单中商品总价格)
+#define CAR_UP_ORDER_URL @"/app/goods_cart2.htm"//购物车提交订单请求 参数user_id, token,cart_ids（选中购物车的id，），返回cart_ids，订单页面会多次用到cart_ids参数,store_ids(订单中商品所在店铺的id，)，order_goods_price该订单中商品总价格
+
+//*****************************首页*****************************
+#define FIRSTWEBVIEW_URL @"/app/index.htm?type=ios"
+
+
+//*****************************分类*****************************
+#define CLASSIFY_SUB_URL @"/app/goodsclass.htm"
+#define CLASSIFY_SUB2_URL @"/app/goods_list.htm"
+
+
+//*****************************支付方式*****************************
+#define PAY_URL @"/app/goods_cart3_payment.htm"//确认订单时查询支付方式，分为在线支付、预存款支付以及货到付款，选择在线支付时确认订单后进入选择在线支付方式页面，选择货到付款后确认订单后订单直接确认完成。 无参数
+#define BALANCEPAY_VALIDATE_URL @"/mobile/order_pay_balance_verify.htm"//订单订单预存款支付时登录密码验证参数 password, user_id, token返回verify为true说明成功
+#define BALANCEPAY_URL @"/app/buyer/pay_balance.htm"//  预存款支付接口，参数order_id, pay_msg,user_id, token,返回code,100成功，-100用户信息错误,-200订单信息错误，-300订单支付方式信息错误,-400预存款余额不足
+#define BALANCEPAY_PASSWORD_VALIDATE_URL @"/app/buyer/pay_balance_verify.htm"// 预存款支付时登录密码验证，参数 password, user_id,token，返回verify，
+#define PAYMETHOD_URL @"/app/goods_cart2_payment.htm"//  确认订单时查询支付方式，分为在线支付、预存款支付以及货到付款，无参数,返回支付标识，提交订单时使用
+#define ONLINEPAY_URL @"/app/pay_online.htm"  //在线支付方式显示(目前只支持手机网页支付宝)  参数order_id, user_id,token，返回code100成功，-100用户信息错误,-200订单信息错误，-300订单支付方式信息错误，-400系统未开启该支付功能，订单不可支付
+#define ONLINEUPPAY_URL @"/app/pay_online_submit.htm"  //在线支付提交请求，参数order_id
+#define PAYOVER_URL @"/app/pay_finish.htm"//,付款完成，参数order_id，WebView加载html
+#define PAYAFTER_URL @"/app/buyer/pay_payafter.htm"//货到付款支付接口  ，参数order_id, pay_msg（付款说明）, user_id, token，返回code,100成功，-100用户信息错误,-200订单信息错误，-300订单支付方式信息错误，-400系统未开启该支付功能，订单不可支付
+#define PAYREYURN_URL @"/app/alipay_return.htm" //支付宝支付成功回调(成功!)
+#define YUCUNPAYYAN_URL @"/app/buyer/pay_balance_verify.htm"// 预存款支付时登录密码验证，参数 password, user_id,token，返回verify
+#define ALLPAYTYPE_URL @"/app/query_all_payment_online.htm"
+#define PAYBAO_URL @"/app/query_payment_online.htm"//(添加参数mark="alipay_app") 不安全,改用ALIPAY_SIGN_URL
+#define ALIPAY_SIGN_URL @"/app/buyer/alipay_sign.htm" //参数：String order_id,订单idString  返回：code：100成功，-100失败，orderInfo：签名
+//order_type, 订单类型 predeposit=预存款充值 integral=积分订单 goods=普通订单 cloudpurchase=云购商品
+#define UNION_PAY_URL @"/app/buyer/union_pay.htm"//银联支付
+#define INVENTORY_URL @"/app/goods_cart2_inventory.htm"//验证提交商品是否失效
+
+#define ALIPAY_SCHEME @"alisdkdemo"
+#define ALIPAY_FINISH_NOTIF @"aliPayProcessDidFinish"
+#define DNGDANDETAIL_URL @"/app/buyer/goods_order_view.htm"
+
+#define THIRD_LOGIN_URL @"/app/app_third_login.htm"
+
+#define kTouchIDVerifyURL @"/app/buyer/pay_password_check.htm" 
+#define kTouchIDSavedPasswordKey @"touchIDSavedPasswordKey"
+#define kTouchIDDefaulskey @"accountTouchIDEnabled"
+
+//*****************************收货地址*****************************
+#define DEFAULTADDRESS_URL @"/app/buyer/address_default_set.htm"//参数user_id, token, addr_id返回verify为true说明设置成功
+#define DEFAULTADDRESSFIND_URL @"/app/buyer/address_default.htm"//默认收货地址查询参数user_id, token,
+#define ADDLIST_URL @"/app/buyer/address.htm"// 用户收获地址列表 参数user_id（用户id）, token
+#define ADDNEW @"/app/buyer/address_save.htm"// user_id, token,trueName（收货人姓名）, zip（邮编）, telephone（电话）, mobile（手机）,area_id（地区id）, area_info（详细地址）
+#define ADDDEFAULT_URL @"/app/buyer_address_default.htm"  //参数user_id, token, addr_id返回verify为true说明设置成功
+#define ADDDELETE_URL @"/app/buyer/address_delete.htm"  //参数user_id, token, addr_id返回verify为true说明删除成功
+
+//*****************************品牌*****************************
+#define BRANDMY_URL @"/app/brand_list.htm"
+
+//*****************************积分商城****************************//
+#define USERSINTEGRAL_URL @"/app/integral_index.htm"//用户积分商城首页
+#define INTEGRALLIST_URL @"/app/integral_list.htm"//积分兑换列表
+#define INTEGRALGOODS_URL @"/app/integral_goods.htm"//积分礼品详情
+#define INTEGRALADDTOCAR_URL @"/app/exchange1.htm"
+#define EXCHANGECAR_URL @"/app/integral_cartlist.htm"//积分购物车
+#define EXCHANGECARCAL_URL @"/app/integral_cart_cal.htm"
+#define EXCCARSUBMITURL @"/app/exchange2.htm" //提交订单
+#define EXCHANGECARLISTSIZE_URL @"/app/integral_cartlist_size.htm" //购物车列表数量
+#define INTEGRALCARTCAL_URL @"/app/integral_cart_cal.htm" //购物车选中项的价格
+#define INTEGRALCOUNTADJUST_URL @"/app/integral_count_adjust.htm"//数量调整
+#define INTEGRALCARTDEL_URL @"/app/integral_cart_del.htm"//删除
+#define EXCCARSUBMIT_URL @"/app/exchange2.htm" //提交订单
+
+//*****************************团购*******************************
+#define GROUPHOME_URL @"/app/group_index.htm"//团购首页
+#define GOODSGROUP_URL @"/app/group_goods.htm" //商品惠
+#define LIFEGROUP_URL @"/app/group_life.htm" //生活惠
+#define GOODDETAILWEB_URL @"/app/group_goods_introduce.htm"//商品惠web
+#define LIFEGROUP_URL @"/app/group_life.htm" //生活惠
+#define LIFEDETAILWEB_URL @"/app/group_life_introduce.htm" //生活惠web
+#define GROUP_ORDER_DETAIL_URL @"/app/buyer/grouplife_order_detail.htm" //生活惠订单详情
+#define BUNDLING_URL @"/app/buyer/account_mobile_save.htm"  //绑定
+#define IDENTIFYINGCODE_URL @"/app/buyer/pay_password_modify.htm"//支付密码密码修改
+#define TYPEGROUP_URL @"/app/group_class.htm"//团购分类
+#define LIFEPAY_REYURN_URL @"/app/integral_alipay_return.htm"
+#define CITY_AREA_URL @"/app/getAreaIndex.htm"//城市列表
+#define AREA_BYGGRPHY_URL @"/app/getAreaByGgrphy.htm"   //经纬度
+#define AREABYCITY @"/app/getAreaByCity.htm"//地区
+#define GROUP_CLASS_URL @"/app/group_class.htm"//分类
+#define NEXT_CLASS_URL @"/app/getNextClass.htm"//下级分类
+#define GROUP_INDEX_URL @"/app/group_index.htm"//团购数据
+#define GROUP_LIFE_ORDER_URL @"/app/group_life_order_save.htm"//生活购订单保存
+
+//*****************************普通订单*****************************
+#define ORDER_URL @"/app/buyer/goods_order.htm" //参数user_id, token,order_cat（查询订单类型，0为购物订单，1为手机充值订单）, beginCount, selectCount
+#define ORDERCANCEL_URL @"/app/buyer/goods_order_cancel.htm"//参数order_id, user_id,token，返回code = 100;// 100取消订单成功，-100用户信息不正确，-200订单信息不正确
+#define ENSURE_URL @"/app/buyer/goods_order_cofirm.htm"//确认收货
+#define FEEFIND_URL @"/app/buyer/goods_order_ship.htm"//物流
+#define ORDERESTIMATE_URL @"/app/buyer/goods_order_evaluate.htm"//评价
+
+#define ADVANCE_ORDER_PAY_VERIFY_URL @"/app/buyer/advance_order_pay_verify.htm"//预售商品订单是否可支付验证 参数order_id
+
+
+//*****************************修改密码*****************************
+#define PASSMODIFY_URL @"/app/buyer/password_modify.htm"//参数user_id, String token, new_password（新密码），old_password（原密码），返回ret，ret为false，参数错误，code=100修改成功，code=-100原密码不正确，code=-200用户信息不正确
+#define PAY_PASSWORD_CHECK_URL @"/app/buyer/pay_password.htm"  //支付密码查询，参数user_id, token   返回100修改成功，-100参数错误，-200用户信息错误,-300未设置支付密码
+#define PAY_PASSWORD_SETTING_URL @"/app/buyer/pay_password_setting.htm"//支付密码设置，参数user_id, token, pay_psw（支付密码）,  login_psw（登录密码）
+
+//*****************************设置*****************************
+#define HELPME_URL @"/app/get_help_doc.htm"
+#define AGREEXIEYI_URL @"/app/get_software_doc.htm"
+#define CONTENTUS_URL @"/app/getservice.htm"
+
+//支付宝回调
+#define ALIPAY_NOTIFY_URL @"/app/alipay_notify.htm"//普通商品
+#define ALIPAY_NOTIFY_INTEGRAL_URL @"/app/integral_alipay_return.htm"
+
+
+//*****************************颜色值*****************************
+#define MY_COLOR [UIColor colorWithRed:219/255.0f green:34/255.0f blue:46/255.0f alpha:1]
+#define _K_Color(R,G,B)     [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1]
+#define SHJ_COLOR [UIColor colorWithRed:242/255.0f green:242/255.0f blue:250/255.0f alpha:255/255.0f]
+#define BACKGROUNDCOLOR [UIColor colorWithRed:242/255.0f green:242/255.0f blue:242/255.0f alpha:1]
+#define SY_PRICE_COLOR UIColorFromRGB(0xf15353)
+
+//*****************************收藏、优惠券、消息*****************************
+#define MYFAVOURITE_URL @"/app/buyer/favorite.htm" //参数user_id, token,beginCount, selectCount
+#define MESSAGE_URL @"/app/buyer/message.htm" //参数user_id, token,beginCount, selectCount
+#define COUPONS_URL @"/app/buyer/coupon.htm" //参数user_id, token,beginCount, selectCount
+#define TS_URL @"/app/buyer/order_2_complain.htm"
+#define TSTopic_URL @"/app/complaint_subject.htm"
+#define TSDid_URL @"/app/buyer/complaint_list.htm"
+#define TSBegin_URL @"/app/buyer/complaint_add.htm"
+#define TSPicture_URL @"/app/image_upload.htm"
+#define MyTSDetail_URL @"/app/buyer/complaint_view.htm"
+#define MyTSCancle_URL @"/app/buyer/complaint_cancel.htm"
+#define MyTSTalk_URL @"/app/buyer/complaint_talk.htm"
+#define MyTSCheck_URL @"/app/buyer/complaint_arbitrate.htm"
+
+#define STORE_COUPONS_URL @"/app/store_coupon.htm"
+#define CAPTURE_COUPONS_URL @"/app/capture_coupon.htm"
+#define CODE_COUPONS_URL @"/verify.htm"
+
+//*****************************余额相关*****************************
+//*****************************余额明细**************
+#define PREDEPOSIT_URL @"/app/buyer/predeposit_log.htm"
+//*****************************余额提现**************
+#define CASHSAVE_URL @"/app/buyer/cash_save.htm"
+//*****************************充值卡验证**************
+#define RECHARGECARDVALIDATE_URL @"/app/buyer/recharge_card_validate.htm"
+//*****************************充值卡充值**************
+#define RECHARGECARDSAVE_URL @"/app/buyer/recharge_card_save.htm"
+//*****************************充值订单保存**************
+#define PushCashSave_URL @"/app/buyer/predeposit_save.htm"
+
+//*****************************积分相关*****************************
+//*****************************积分明细**************
+#define INTEGRALLOGLIST_URL @"/app/buyer/integrallog_list.htm"
+
+//*****************************收藏相关*****************************
+//*****************************收藏商品列表**************
+#define MYCOLLECTGOODS_URL @"/app/buyer/favorite_goods.htm"
+//*****************************收藏店铺列表**************
+#define MYCOLLECTSTOPS_URL @"/app/buyer/favorite_store.htm"
+//*****************************取消商品和店铺收藏**************
+#define MYCOLLECTDELETE_URL @"/app/buyer/favorite_del.htm"
+
+//*****************************足迹*****************************
+//*****************************足迹列表**************
+#define FOOTPOINT_URL @"/app/buyer/foot_point.htm"
+//*****************************足迹移除**************
+#define FOOTPOINTREMVE_URL @"/app/buyer/foot_point_remove.htm"
+
+//*****************************AppURL**************
+//#define APPSTORE_URL @"itms-apps://itunes.apple.com/us/app/iskyshop-b2b2c/id975791093?l=zh&ls=1&mt=8"
+
+#define APPSTORE_URL @"http://itunes.apple.com/app/id1123574005"
+//******************************vip中心**************************
+//返佣收益
+#define FANYONG_URL @"/app/buyer/userordercommission_list.htm"
+//奖励管理
+#define JIANGLI_URL @"/app/buyer/vip_reward_manage_item.htm"
+//领取钱币
+#define LINGQU_URL @"/app/buyer/vip_reward_manage_receive.htm"
+//团队管理
+
+#define TEAM_URL @"/app/buyer/vip_team_manage.htm"
+
+//保存奖励到余额
+#define SAVE_TO_ACCOUNT_URL @"/app/buyer/vip_reward_manage_yue.htm"
+
+
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "ASIHTTPRequest.h"
+#import "AFNetworkTool.h"
+#import "MJRefresh.h"
+#import "LJControl.h"
+#import "UIImageView+WebCache.h"
+#import "consultViewNetwork.h"
+#import "ClassifyModel.h"
+#import "Model.h"
+#import "MyUtil.h"
+#import "SYObject.h"
+#import "SYShopAccessTool.h"
+#import "UIView+SDAutoLayout.h"
+#import "YYModel.h"
+#import "WXApiManager.h"
+#import "WBApiManager.h"
+#import "UPPayManager.h"
+#import "WeiboSDK.h"
+#import "NSAttributedString+Range.h"
+#import "Requester.h"
+#import "Parser.h"
+#import "OHAlertView.h"
+#import "WDAlertView.h"
+#import "WDInputView.h"
+
+#endif
+
+#ifndef __OPTIMIZE__
+#define NSLog(...) NSLog(__VA_ARGS__)
+//#define NSLog(...) {}
+#else
+#define NSLog(...) {}
+#endif

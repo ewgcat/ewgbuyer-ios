@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="evaluationTieViewController">
+            <connections>
+                <outlet property="MyTableView" destination="hzU-Xl-ztt" id="yMl-OQ-juW"/>
+                <outlet property="view" destination="0SY-Xe-SBy" id="Hze-8R-AzE"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="0SY-Xe-SBy">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="hzU-Xl-ztt">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="hzU-Xl-ztt" secondAttribute="bottom" id="5m6-FA-n9B"/>
+                <constraint firstAttribute="trailing" secondItem="hzU-Xl-ztt" secondAttribute="trailing" id="H7B-Tk-sND"/>
+                <constraint firstItem="hzU-Xl-ztt" firstAttribute="top" secondItem="0SY-Xe-SBy" secondAttribute="top" constant="64" id="Hc4-BO-ntE"/>
+                <constraint firstItem="hzU-Xl-ztt" firstAttribute="leading" secondItem="0SY-Xe-SBy" secondAttribute="leading" id="jtm-1e-wKE"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="hzU-Xl-ztt"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="5m6-FA-n9B"/>
+                    <exclude reference="H7B-Tk-sND"/>
+                    <exclude reference="Hc4-BO-ntE"/>
+                    <exclude reference="jtm-1e-wKE"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="hzU-Xl-ztt"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="5m6-FA-n9B"/>
+                    <include reference="H7B-Tk-sND"/>
+                    <include reference="Hc4-BO-ntE"/>
+                    <include reference="jtm-1e-wKE"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>

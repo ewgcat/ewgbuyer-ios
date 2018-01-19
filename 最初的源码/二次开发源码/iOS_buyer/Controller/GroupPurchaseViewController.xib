@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GroupPurchaseViewController">
+            <connections>
+                <outlet property="noHaveView" destination="tzQ-zw-Few" id="sRQ-kv-F1b"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tzQ-zw-Few">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="抱歉，此处暂无团购" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4g-vJ-VOG">
+                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="XOg-K4-VhL"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="XOg-K4-VhL"/>
+                                </mask>
+                            </variation>
+                            <variation key="widthClass=compact">
+                                <mask key="constraints">
+                                    <include reference="XOg-K4-VhL"/>
+                                </mask>
+                            </variation>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="x4g-vJ-VOG" firstAttribute="leading" secondItem="tzQ-zw-Few" secondAttribute="leading" id="0lq-nZ-XYV"/>
+                        <constraint firstAttribute="trailing" secondItem="x4g-vJ-VOG" secondAttribute="trailing" id="Gkb-RI-Ysi"/>
+                        <constraint firstItem="x4g-vJ-VOG" firstAttribute="top" secondItem="tzQ-zw-Few" secondAttribute="top" constant="280" id="KJJ-wD-ZdY"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="x4g-vJ-VOG"/>
+                        </mask>
+                        <mask key="constraints">
+                            <exclude reference="0lq-nZ-XYV"/>
+                            <exclude reference="Gkb-RI-Ysi"/>
+                            <exclude reference="KJJ-wD-ZdY"/>
+                        </mask>
+                    </variation>
+                    <variation key="widthClass=compact">
+                        <mask key="subviews">
+                            <include reference="x4g-vJ-VOG"/>
+                        </mask>
+                        <mask key="constraints">
+                            <include reference="0lq-nZ-XYV"/>
+                            <include reference="Gkb-RI-Ysi"/>
+                            <include reference="KJJ-wD-ZdY"/>
+                        </mask>
+                    </variation>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="tzQ-zw-Few" secondAttribute="bottom" id="3EW-Ek-DXU"/>
+                <constraint firstItem="tzQ-zw-Few" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="55" id="EDb-ea-WK1"/>
+                <constraint firstAttribute="trailing" secondItem="tzQ-zw-Few" secondAttribute="trailing" id="VDH-T5-Vct"/>
+                <constraint firstItem="tzQ-zw-Few" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="wGD-fD-xDv"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="tzQ-zw-Few"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="3EW-Ek-DXU"/>
+                    <exclude reference="EDb-ea-WK1"/>
+                    <exclude reference="VDH-T5-Vct"/>
+                    <exclude reference="wGD-fD-xDv"/>
+                </mask>
+            </variation>
+            <variation key="widthClass=compact">
+                <mask key="subviews">
+                    <include reference="tzQ-zw-Few"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="3EW-Ek-DXU"/>
+                    <include reference="EDb-ea-WK1"/>
+                    <include reference="VDH-T5-Vct"/>
+                    <include reference="wGD-fD-xDv"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>

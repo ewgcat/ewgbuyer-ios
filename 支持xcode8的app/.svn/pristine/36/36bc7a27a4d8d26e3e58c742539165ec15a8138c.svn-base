@@ -1,0 +1,271 @@
+//
+//  StandingsViewController.m
+//  
+//
+//  Created by apple on 15/10/16.
+//
+//
+
+#import "StandingsViewController.h"
+#import "ExchangeHomeViewController.h"
+#import "IntegralExchangeViewController.h"
+#import "StandingsCell.h"
+#import "AccountModel.h"
+#import "JIfenshuomingViewController.h"
+@interface StandingsViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
+{
+    __weak IBOutlet UIView *NoDataView;
+    NSMutableArray *dataArray;
+    UITableView *tableview;
+    int  count;
+}
+@end
+
+@implementation StandingsViewController
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
+    self.tabBarController.tabBar.hidden = YES;
+    [[self navigationController] setNavigationBarHidden:YES animated:NO];
+    
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+ [[self navigationController] setNavigationBarHidden:NO animated:NO];
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    count=0;
+    dataArray=[[NSMutableArray alloc]init];
+    [self createNavigation];
+    [self designPage];
+    [self getBuyerPredepositLogBeginCount:@"0" andSelectCount:@"10" andDepositType:@""];
+}
+#pragma mark -上拉刷新、下拉加载
+-(void)headerRereshing{
+    [self getBuyerPredepositLogBeginCount:@"0" andSelectCount:@"10" andDepositType:@""];
+    [tableview headerEndRefreshing];
+}
+-(void)footerRereshing{
+    count++;
+    [self getBuyerPredepositLogBeginCount:@"0" andSelectCount:[NSString stringWithFormat:@"%d",10*count] andDepositType:@""];
+    [tableview footerEndRefreshing];
+}
+
+#pragma mark -界面
+-(void)createNavigation{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]>= 7.0) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+    //导航栏
+    UIView *bgView=[LJControl viewFrame:CGRectMake(0,0,ScreenFrame.size.width, 64) backgroundColor:UIColorFromRGB(0Xdf0000)];
+    [self.view addSubview:bgView];
+
+    UILabel *titleLabel=[LJControl labelFrame:CGRectMake(ScreenFrame.size.width/2-50, 22, 100, 40) setText:@"积分明细" setTitleFont:22 setbackgroundColor:[UIColor clearColor] setTextColor: [UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
+    [bgView addSubview:titleLabel];
+   
+    UIButton *backButton = [LJControl backBtn];
+    backButton.frame=CGRectMake(15,30,15,23.5);
+    backButton.tag=1000;
+    [backButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [bgView addSubview:backButton];
+    
+    
+    UIButton *jifenshuoming=[[UIButton alloc]initWithFrame:CGRectMake(ScreenFrame.size.width-90, 30, 80, 23.5)];
+    [jifenshuoming setTitle:@"积分说明" forState:UIControlStateNormal];
+    jifenshuoming.titleLabel.font=[UIFont systemFontOfSize:15];
+    [bgView addSubview:jifenshuoming];
+    [jifenshuoming addTarget:self action:@selector(jifenshuoming) forControlEvents:UIControlEventTouchUpInside];
+    
+}
+
+-(void)jifenshuoming{
+    JIfenshuomingViewController *vc=[[JIfenshuomingViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+#pragma mark -UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    if (self.navigationController.viewControllers.count == 1){  //关闭主界面的右滑返回
+        return NO;
+    }else{
+        return YES;
+    }
+}   
+-(void)designPage{
+    //暂无分类
+    UIImageView *noDataImage=[LJControl imageViewFrame:CGRectMake(ScreenFrame.size.width/2-131,50, 263,263) setImage:@"seller_center_nothing.png" setbackgroundColor:[UIColor clearColor]];
+    [NoDataView addSubview:noDataImage];
+    NoDataView.hidden=YES;
+    
+    //tableview
+    tableview=[[UITableView alloc]initWithFrame:CGRectMake(0, 64, ScreenFrame.size.width, ScreenFrame.size.height-64) style:UITableViewStyleGrouped];
+    tableview.backgroundColor=[UIColor whiteColor];
+    tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableview.tableHeaderView=[self getTableHeaderView];
+    tableview.delegate=self;
+    tableview.dataSource=self;
+    [self.view addSubview:tableview];
+    [tableview addHeaderWithTarget:self action:@selector(headerRereshing)];
+    [tableview addFooterWithTarget:self action:@selector(footerRereshing)];
+}
+-(UIView *)getTableHeaderView{
+    UIView *view=[LJControl viewFrame:CGRectMake(0, 0, ScreenFrame.size.width, 164) backgroundColor:UIColorFromRGB(0Xf8a3a3)];
+    UIView *view1=[LJControl viewFrame:CGRectMake(10, 10, ScreenFrame.size.width-20, 144) backgroundColor:[UIColor whiteColor]];
+    view1.layer.cornerRadius = 8;
+    view1.layer.masksToBounds = YES;
+    
+    UILabel *label1=[LJControl labelFrame:CGRectMake(8,10,view1.bounds.size.width-16, 20) setText:@"我的积分" setTitleFont:15 setbackgroundColor:[UIColor whiteColor] setTextColor:UIColorFromRGB(0Xbbbbbb) textAlignment:NSTextAlignmentLeft];
+    [view1 addSubview:label1];
+    
+    NSString *text=[NSString stringWithFormat:@"%@ 分",_myIntegral];
+//    CGRect rect=[text boundingRectWithSize:CGSizeMake(view1.bounds.size.width-100, 60) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:30]} context:nil];
+    UILabel *label2=[LJControl labelFrame:CGRectMake(8,32,view1.bounds.size.width-100, 60) setText:text setTitleFont:28 setbackgroundColor:[UIColor whiteColor] setTextColor:UIColorFromRGB(0Xde5b54) textAlignment:NSTextAlignmentLeft];
+    [view1 addSubview:label2];
+    
+//    UILabel *label3=[LJControl labelFrame:CGRectMake(rect.size.width+20,32,20, 60) setText:@"分" setTitleFont:30 setbackgroundColor:[UIColor whiteColor] setTextColor:UIColorFromRGB(0Xde5b54) textAlignment:NSTextAlignmentLeft];
+//    [view1 addSubview:label3];
+    
+    UIButton *button1=[LJControl buttonType:UIButtonTypeCustom setFrame:CGRectMake(view1.bounds.size.width-90, 40, 80, 30) setNormalImage:nil setSelectedImage:nil setTitle:@"" setTitleFont:0 setbackgroundColor:[UIColor clearColor]];
+    UILabel *label4=[LJControl labelFrame:CGRectMake(0,0,80, 30) setText:@"兑换记录" setTitleFont:17 setbackgroundColor:[UIColor whiteColor] setTextColor:UIColorFromRGB(0Xe1a4a6) textAlignment:NSTextAlignmentCenter];
+    button1.tag=1001;
+    [button1 addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [button1 addSubview:label4];
+    [view1 addSubview:button1];
+    
+    UIButton *button2=[LJControl buttonType:UIButtonTypeCustom setFrame:CGRectMake(30,100,view1.bounds.size.width-60,36)  setNormalImage:nil setSelectedImage:nil setTitle:@"" setTitleFont:0 setbackgroundColor:[UIColor clearColor]];
+    button2.tag=1002;
+    [button2 addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *label5=[LJControl labelFrame:CGRectMake(0,0,view1.bounds.size.width-60,36) setText:@"积分兑换商品" setTitleFont:16 setbackgroundColor:UIColorFromRGB(0Xf15553) setTextColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
+    label5.layer.cornerRadius = 4;
+    label5.layer.masksToBounds = YES;
+    [button2 addSubview:label5];
+    
+    [view1 addSubview:button2];
+    
+    [view addSubview:view1];
+    return view;
+}
+-(void)buttonClicked:(UIButton *)button{
+    if (button.tag==1000) {
+        //返回
+        [self.navigationController popViewControllerAnimated:YES];
+    }else if (button.tag==1001){
+    //兑换记录
+        UIStoryboard * homePageStoryboard = [UIStoryboard storyboardWithName:@"usercenterStoryboard" bundle:nil];
+        IntegralExchangeViewController *ievc = [homePageStoryboard instantiateViewControllerWithIdentifier:@"IntegralExchangeViewController"];
+        [self.navigationController pushViewController:ievc animated:YES];
+        
+    
+    }else{
+        //积分兑换商品
+        if ([_fty integerValue]==1) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            ExchangeHomeViewController *dddd = [[ExchangeHomeViewController alloc]init];
+            [self.navigationController pushViewController:dddd animated:YES];
+        }
+       
+    }
+}
+#pragma mark -数据
+-(void)getBuyerPredepositLogBeginCount:(NSString *)beginCount andSelectCount:(NSString *)selectCount andDepositType:(NSString *)depositType{
+
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@?user_id=%@&token=%@&beginCount=%@&selectCount=%@&depositType=%@",FIRST_URL,INTEGRALLOGLIST_URL,[SYObject currentUserID],[SYObject currentToken],beginCount,selectCount,depositType];
+    NSLog(@"%@",urlstr);
+    
+    __weak typeof(self)ws= self;
+    [[Requester managerWithHeader]POST:urlstr parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [ws requestFinished:responseObject];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+        NSLog(@"\n\n***错误信息:***\n*类名:%@*\n*方法名:%s*\n*行数:%d*\n\n",NSStringFromClass([self class]),__func__,__LINE__);
+        [SYObject failedPrompt:@"请求错误"];
+
+    }];
+    
+}
+#pragma mark- ASIHTTPRequestDelegate
+-(void)requestFinished:(NSDictionary *)dict{
+    NSDictionary *dic=dict;
+    NSLog(@"%@",dic);
+    if (dataArray.count>0) {
+        [dataArray removeAllObjects];
+    }
+    NSArray *array=[dic objectForKey:@"data"];
+    for (NSDictionary *dict in array) {
+        AccountModel *model=[[AccountModel alloc]init];
+        NSString *str=[NSString stringWithFormat:@"%@",[dict objectForKey:@"type"]];
+        if ([str isEqualToString:@"reg"]) {
+            model.title=@"注册赠送";
+        }else if ([str isEqualToString:@"system"]) {
+            model.title=@"管理员操作";
+        }else if ([str isEqualToString:@"login"]) {
+            model.title=@"用户登录";
+        }else if ([str isEqualToString:@"order"]) {
+            model.title=@"订单获得";
+        }else if ([str isEqualToString:@"integral_order"]) {
+            model.title=@"积分兑换";
+        }else if ([str isEqualToString:@"vip"]) {
+            model.title=@"推广会员赠送";
+        }
+        model.time=[NSString stringWithFormat:@"%@",[dict objectForKey:@"time"]];
+        model.money=[NSString stringWithFormat:@"%@",[dict objectForKey:@"integral"]];
+        [dataArray addObject:model];
+        
+    }
+    if (dataArray.count==0) {
+        NoDataView.hidden=NO;
+        tableview.hidden=YES;
+    }else{
+        NoDataView.hidden=YES;
+        tableview.hidden=NO;
+        [tableview reloadData];
+    }
+
+
+}
+
+
+#pragma mark- UITableViewDataSource & UITableViewDelegate
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO ;
+}
+//修改编辑按钮文字
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return dataArray.count;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 80;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *myTabelviewCell = @"StandingsCell";
+    StandingsCell *cell = [tableView dequeueReusableCellWithIdentifier:myTabelviewCell];
+    if(cell == nil){
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"StandingsCell" owner:self options:nil] lastObject];
+    }
+    AccountModel *model=[dataArray objectAtIndex:indexPath.row];
+    cell.model=model;
+    return cell;
+}
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *view=[LJControl viewFrame:CGRectMake(0,0, ScreenFrame.size.width,44) backgroundColor:UIColorFromRGB(0Xececec)];
+    UILabel *label=[LJControl labelFrame:CGRectMake(20, 8, 100 , 44-16) setText:@"最近积分记录" setTitleFont:15 setbackgroundColor:UIColorFromRGB(0Xececec) setTextColor:UIColorFromRGB(0X6f6f6f) textAlignment:NSTextAlignmentLeft];
+    [view addSubview:label];
+    return view;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 44;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.001;
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+@end

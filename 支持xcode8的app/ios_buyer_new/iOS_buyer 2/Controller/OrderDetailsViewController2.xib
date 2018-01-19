@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OrderDetailsViewController2">
+            <connections>
+                <outlet property="MyTableView" destination="fFO-ia-Oo2" id="4FN-WS-hle"/>
+                <outlet property="view" destination="gyV-rr-oNH" id="8ze-YM-vtC"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="gyV-rr-oNH">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fFO-ia-Oo2">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="fFO-ia-Oo2" secondAttribute="bottom" constant="50" id="62U-tb-MfU">
+                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="fFO-ia-Oo2" firstAttribute="leading" secondItem="gyV-rr-oNH" secondAttribute="leading" id="7C4-IH-g6r"/>
+                <constraint firstItem="fFO-ia-Oo2" firstAttribute="top" secondItem="gyV-rr-oNH" secondAttribute="top" constant="64" id="dm4-3z-OpL"/>
+                <constraint firstAttribute="trailing" secondItem="fFO-ia-Oo2" secondAttribute="trailing" id="tIs-KI-jbu"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="fFO-ia-Oo2"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="62U-tb-MfU"/>
+                    <exclude reference="7C4-IH-g6r"/>
+                    <exclude reference="dm4-3z-OpL"/>
+                    <exclude reference="tIs-KI-jbu"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="fFO-ia-Oo2"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="62U-tb-MfU"/>
+                    <include reference="7C4-IH-g6r"/>
+                    <include reference="dm4-3z-OpL"/>
+                    <include reference="tIs-KI-jbu"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>

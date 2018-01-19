@@ -1,0 +1,55 @@
+//
+//  ClassifyModel.m
+//  My_App
+//
+//  Created by apple on 14-7-29.
+//  Copyright (c) 2014年 apple. All rights reserved.
+//
+
+#import "ClassifyModel.h"
+
+@implementation ClassifyModel
+@synthesize classify_id,classify_icon_path,classify_className,classify_children,classify_thirdArray;
+
+//goods
+@synthesize goods_current_price,goods_id,goods_main_photo,goods_name,goods_salenum,goods_status,goods_goods_count,goods_goods_spec,goods_sudu,goods_taidu,goods_xiangfu,goods_pingjiazhi,goods_pingcontent,goods_cart_id,goods_cart_price,goods_evaluate,goods_price1,goods_price2,goods_price3,goods_addTime,goods_refund_msg,goods_sn,goods_oid,goods_total_price,goods_groupinfos,goods_return_content,goods_rid,goods_self_address,goods_pay_time,goods_status_msg;
+
+//详情
+@synthesize detail_id,detail_goods_current_price,detail_goods_details,detail_goods_inventory,detail_goods_name,detail_goods_photos,detail_goods_price,detail_goods_salenum,detail_inventory_type,detail_status,detail_evaluate_count,detail_goods_bad_evaluate,detail_goods_middle_evaluate,detail_goods_well_evaluate,detail_trans_information,detail_consult_count,detail_goods_main_photo,detail_goods_main_id,detail_goods_main_name,detail_current_city,detail_goods_type,detail_goodsstatus_info,detail_store_info,goods_apply_status,goods_evaluate_status,goods_receiver_address,goods_receiver_mobile,goods_receiver_name,goods_receiver_tel,detail_choice_type;
+
+//规格
+@synthesize specifications_spec_key,specifications_spec_type,specifications_spec_values;
+
+//地区
+@synthesize region_id,region_name;
+
+//评价
+@synthesize ping_addTime,ping_bad,ping_content,ping_middle,ping_ret,ping_user,ping_well,ping_height,ping_reply,ping_reply_content,ping_reply_time,ping_reply_user,ping_reply_height,ping_user_photo,ping_user_user_id,ping_spec,ping_Tie;
+
+//car
+@synthesize car_cart_id,car_cart_price,car_goods_count,car_goods_id,car_goods_main_photo,car_goods_name,car_goods_price,car_goods_spec,car_goods_status;
+
+@synthesize manager_addr_id,manager_area,manager_areaInfo,manager_telephone,manager_trueName,manager_zip,manager_mobile;
+
+@synthesize peisongList,peisongstore_name,peisongstore_id,peisongvalue,peisonggoods_list;
+
+//优惠劵
+@synthesize coupon_addTime,coupon_amount,coupon_beginTime,coupon_endTime,coupon_id,coupon_info,coupon_name,coupon_order_amount,coupon_sn,coupon_status,coupon_pic;
+
+
+
+@synthesize dingdetail_coupon_price,dingdetail_goods_list,dingdetail_goods_price,dingdetail_invoice,dingdetail_invoiceType,dingdetail_order_id,dingdetail_order_num,dingdetail_order_status,dingdetail_order_total_price,dingdetail_payType,dingdetail_receiver_area,dingdetail_receiver_area_info,dingdetail_receiver_mobile,dingdetail_receiver_Name,dingdetail_receiver_zip,dingdetail_ship_price,dingdetail_store_name,dingdetail_express_company,dingdetail_shipCode,dingdetail_shipTime,dingdetail_trans_list,dingdetail_goods_maps,dingdetail_oid,dingdetail_return_can,dingdetail_goods_gsp_ids,dingdetail_order_pay_msg,dingdetail_order_pay_time;
+
+
+@synthesize trans_content,trans_message,trans_status,trans_time;
+
+
+@synthesize store_id,store_name,store_store_logo;
+
+
+@synthesize free_acc,free_count,free_id,free_name,free_price;
+
+@synthesize freeDetail_apply_count,freeDetail_current_count,freeDetail_default_count,freeDetail_endTime,freeDetail_free_acc,freeDetail_free_details,freeDetail_free_id,freeDetail_free_name,freeDetail_free_price;
+
+
+@end

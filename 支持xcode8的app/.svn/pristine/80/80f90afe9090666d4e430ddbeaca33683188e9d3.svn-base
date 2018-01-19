@@ -1,0 +1,134 @@
+//
+//  SYObject.h
+//  My_App
+//  封装工具类，可以方便的创建各种控件，增加代码复用性
+//  Created by shiyuwudi on 15/11/10.
+//  Copyright © 2015年 shiyuwudi. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@class DetailViewController;
+
+//颜色
+#define SY_COLOR_RED UIColorFromRGB(0xf15353)
+//图片类型(晒单\追加晒单)
+typedef enum {
+    SY_PHOTO_TYPE_NORMAL,
+    SY_PHOTO_TYPE_ADD
+}SY_PHOTO_TYPE;
+
+@class EvaModel;
+@class SYObject;
+
+typedef void(^SYCompletionBlock)(void);
+
+@protocol SYDetailCellViewDelegate <NSObject>
+
+//点击代理
+@optional
+-(void)naviButtonClicked:(SYObject *)selff index:(NSInteger)index;
+//图片被点击代理
+-(void)imageBtnIsClicked:(SYObject *)detailCellView indexOfImage:(NSInteger)index cellIndex:(NSInteger)cellIndex type:(SY_PHOTO_TYPE)type;
+//图片尺寸获取完毕代理
+-(void)imageSizeAcquired:(SYObject *)detailCellView size:(CGSize)size index:(NSInteger)index cellIndex:(NSInteger)cellIndex type:(SY_PHOTO_TYPE)type;
+
+@end
+
+@interface SYObject : UIView
+
+
+#pragma mark - 遮罩和提示相关
+
++(void)startLoading;
++(void)endLoading;
+
++(void)startLoadingWithTitle:(NSString *)title;
++(void)startLoadingInSuperview:(UIView *)superview;
+
++(void)failedPrompt:(NSString *)title;
++(void)failedPrompt:(NSString *)title complete:(SYCompletionBlock)completion;
++(void)failedPromptInSuperView:(UIView *)superView title:(NSString *)title complete:(SYCompletionBlock)completion;
++(void)failedPromptInSuperView:(UIView *)superView title:(NSString *)title;
++(void)setGif:(NSString *)gifName;//用gif做加载图片
++(void)reset;//清理gif,用回自定义图片
+
++(void)startInfinitLoading;//没有超时限制
+
+#pragma mark - 自动创建顶部标签页,和配套的底部表视图
+-(void)sy_addWithArray:(NSArray *)titleArr toView:(UIView *)containerView;
+-(void)disableScrolling;
+@property (nonatomic,assign)NSInteger curIndex;
+/**
+ ****个性版||创建之后要保存为strong属性或者成员变量!表视图用tableViewArray属性访问****
+ */
+-(void)sy_addHeadNaviTitleArray:(NSArray *)titleArr toContainerViewWithFrameSetted:(UIView *)containerView headerHeight:(CGFloat)headerHeight topMargin:(CGFloat)topMargin testColor:(BOOL)testColor normalFontSize:(CGFloat)normalFontSize selectedFontSize:(CGFloat)selectedFontSize;
+/**
+ ****精简版||创建之后要保存为strong属性或者成员变量!表视图用tableViewArray属性访问****
+ */
+-(void)sy_addHeadNaviTitleArray:(NSArray *)titleArr toContainerViewWithFrameSetted:(UIView *)containerView;
+/**
+ 设置当前按钮的颜色，默认是橙色
+ */
+-(void)sy_setSelectColor:(UIColor *)color;
+/**
+ 设置非当前按钮的颜色，默认是灰色
+ */
+-(void)sy_setNormalColor:(UIColor *)color;
+/**
+ 设置提示条的颜色，默认是橙色
+ */
+
+//设置第一个，第二个tableview
+-(void)setFirstTableViewAs:(UITableView *)firstTableView;
+-(void)setSecondTableViewAs:(UITableView *)secondTableView;
+
+@property(nonatomic,strong,readonly)NSMutableArray *tableViewArray;
+
+#pragma mark - 评价管理
+@property (nonatomic, strong)EvaModel *evaModel;
+@property (nonatomic, weak)UIButton *clearButton;
+@property (nonatomic, weak)id<SYDetailCellViewDelegate> delegate;
+@property (nonatomic, weak)UIView *imagesHolderView;
+@property (nonatomic, weak)UIView *imagesHolderView1;
+-(UIView *)evaCellViewWithEvaModel:(EvaModel *)model cellIndex:(NSInteger)cellIndex;
+-(CGFloat)evaCellHeightByModel:(EvaModel *)model;
+#pragma mark - 地址管理
+@property (nonatomic,weak)UITextField *textField;
+@property (nonatomic,weak)UIImageView *arrow;
+-(CGFloat)cellHeight;
+-(UIView *)addAddressLineViewWithTitle:(NSString *)title;
+#pragma mark - 登录管理
++(NSArray *)hasUserLogedIn:(BOOL*)flag;//判断是否登录，如果登录则返回文件数组
++(NSString *)currentUserName;//当前用户名(如登录)
++(NSString *)currentUserID;
++(NSString *)currentToken;
++(NSString *)currentVerify;
++(void)checkLogin:(UINavigationController *)navigationController s:(void(^)(BOOL login))ret;//检查重复登录情况
+#pragma mark - 订单相关
++(NSString *)orderStatusStringByCode:(NSString *)code;
++(UIView *)bottomViewWithButtonTitleArray:(NSArray *)btnArray resultBtnArray:(NSMutableArray **)resultArray;
++(void)redirectAfterPayment:(UINavigationController *)navigationController nameNphone:(NSString *)nameNphone address:(NSString *)address realprice:(NSString *)realprice;//普通商品成功页
++(void)redirectPurchaseOfCloud:(UINavigationController *)navigationController nameNphone:(NSString *)nameNphone address:(NSString *)address realprice:(NSString *)realprice;//云购商品成功页
+
+//vip升级成功成功页
++(void)redirectvip:(UINavigationController *)navigationController nameNphone:(NSString *)nameNphone address:(NSString *)address realprice:(NSString *)realprice;
+
++(void)redirectAfterPayment:(UINavigationController *)navigationController orderNum:(NSDictionary *)userInfo;//团购商品成功页
++(void)redirectAfterPayment:(UINavigationController *)navigationController orderNum:(NSDictionary *)userInfo orderType:(NSString *)orderType;
++(void)redirectAfterPayOnDel:(UINavigationController *)navigationController nameNphone:(NSString *)nameNphone address:(NSString *)address realprice:(NSString *)realprice;//货到付款
+#pragma mark - 通用
++ (UIImage *)scaleToSize:(UIImage *)img size:(CGSize)size;
+//+(void)loginActionInViewController:(UIViewController *)viewController action:(SYCompletionBlock)action;
++(NSString *)toStr:(NSInteger)num;
++(NSString *)stringByNumber:(NSString *)number;//(底层的)数字转(底层的)字符串
++(UIView *)noDataView;//无数据视图，自己设置frame
++(void)selfNavigationController:(UINavigationController *)naviCtl pushDetailPageByGoodsID:(NSString *)goodsID;
++(DetailViewController *)goodsDetailPageWithGoodsID:(NSString *)goodsID;//商品详情页
++(UIView *)loadingViewAtCenter;//正在加载视图
+-(UILabel *)labelWithFrame:(CGRect)frame text:(NSString *)title font:(NSInteger)font color:(UIColor *)color;//label
+-(instancetype)detailCellViewWithTitle:(NSString *)title titleColor:(UIColor *)titleColor font:(UIFont *)font centerSeparatorSpaceFromLeftMargin:(CGFloat)space withRightDisclosureIndicator:(BOOL)have andRightText:(NSString *)rightText viewHeight:(CGFloat)height frame:(CGRect)frame buttonTag:(NSInteger)tag;//商品详情页的带右箭头的label
++(UIViewController *)VCFromUsercenterStoryboard:(NSString *)name;
+#pragma mark - 旧代码抽象出来的方法
++(CGRect)orderCellImgFrameAtIndex:(NSInteger)index;//CGRectMake(15+65*i, 5, 55, 55)
+
+@end

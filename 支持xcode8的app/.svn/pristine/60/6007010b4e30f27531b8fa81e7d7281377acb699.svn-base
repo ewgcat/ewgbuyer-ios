@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="Oac-VY-vd6" customClass="SYObject">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hp1-E6-55p" userLabel="Background Image View">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wVR-si-gfe" userLabel="Content View" customClass="UIImageView">
+                    <rect key="frame" x="0.0" y="209" width="320" height="151"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="nS6-8p-tvf">
+                            <rect key="frame" x="20" y="120" width="280" height="21"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="imr-oV-jTp"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N1e-3D-ba0" userLabel="Loading View">
+                            <rect key="frame" x="115" y="10" width="90" height="90"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W3V-zK-HVx">
+                                    <rect key="frame" x="24" y="32" width="43" height="27"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="27" id="7GC-D8-JQW"/>
+                                        <constraint firstAttribute="width" constant="43" id="PJe-Tg-47s"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.80441810344827591" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="90" id="19Z-LB-go9"/>
+                                <constraint firstItem="W3V-zK-HVx" firstAttribute="top" secondItem="N1e-3D-ba0" secondAttribute="top" id="Ctr-aX-Awy"/>
+                                <constraint firstAttribute="trailing" secondItem="W3V-zK-HVx" secondAttribute="trailing" id="Ehh-1Z-qbT"/>
+                                <constraint firstItem="W3V-zK-HVx" firstAttribute="centerY" secondItem="N1e-3D-ba0" secondAttribute="centerY" id="FUm-rs-4ul"/>
+                                <constraint firstAttribute="bottom" secondItem="W3V-zK-HVx" secondAttribute="bottom" id="I45-1e-mLN"/>
+                                <constraint firstItem="W3V-zK-HVx" firstAttribute="leading" secondItem="N1e-3D-ba0" secondAttribute="leading" id="gxo-Yw-Lt9"/>
+                                <constraint firstItem="W3V-zK-HVx" firstAttribute="centerX" secondItem="N1e-3D-ba0" secondAttribute="centerX" id="hDb-FJ-re0"/>
+                                <constraint firstAttribute="height" constant="90" id="nrq-eJ-M3G"/>
+                            </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="Ctr-aX-Awy"/>
+                                    <exclude reference="Ehh-1Z-qbT"/>
+                                    <exclude reference="I45-1e-mLN"/>
+                                    <exclude reference="gxo-Yw-Lt9"/>
+                                </mask>
+                            </variation>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="nS6-8p-tvf" secondAttribute="bottom" constant="10" id="77y-dg-LYu"/>
+                        <constraint firstItem="nS6-8p-tvf" firstAttribute="leading" secondItem="wVR-si-gfe" secondAttribute="leading" constant="20" id="RvN-uM-Lgj"/>
+                        <constraint firstAttribute="centerX" secondItem="N1e-3D-ba0" secondAttribute="centerX" id="fte-Lu-GgS"/>
+                        <constraint firstAttribute="trailing" secondItem="nS6-8p-tvf" secondAttribute="trailing" constant="20" id="hKW-w6-Xry"/>
+                        <constraint firstAttribute="width" constant="320" id="m1r-te-p9S"/>
+                        <constraint firstItem="nS6-8p-tvf" firstAttribute="top" secondItem="N1e-3D-ba0" secondAttribute="bottom" constant="20" id="mfA-AA-ufI"/>
+                        <constraint firstItem="N1e-3D-ba0" firstAttribute="top" secondItem="wVR-si-gfe" secondAttribute="top" constant="10" id="qQf-8u-G2c"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <accessibility key="accessibilityConfiguration" identifier="loader">
+                <bool key="isElement" value="YES"/>
+            </accessibility>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="hp1-E6-55p" secondAttribute="bottom" id="36O-eo-3hb"/>
+                <constraint firstAttribute="centerY" secondItem="wVR-si-gfe" secondAttribute="centerY" id="8aE-uf-EAf"/>
+                <constraint firstItem="hp1-E6-55p" firstAttribute="top" secondItem="Oac-VY-vd6" secondAttribute="top" id="JVI-1b-gMP"/>
+                <constraint firstAttribute="centerX" secondItem="wVR-si-gfe" secondAttribute="centerX" id="egG-hu-mGE"/>
+                <constraint firstAttribute="trailing" secondItem="hp1-E6-55p" secondAttribute="trailing" id="fYO-5p-aTt"/>
+                <constraint firstItem="hp1-E6-55p" firstAttribute="leading" secondItem="Oac-VY-vd6" secondAttribute="leading" id="rg7-51-Oua"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="bgView" destination="hp1-E6-55p" id="0o9-Tj-wo0"/>
+                <outlet property="contentView" destination="wVR-si-gfe" id="gFS-RN-iV5"/>
+                <outlet property="imageView" destination="W3V-zK-HVx" id="SRj-to-G4T"/>
+                <outlet property="loadingView" destination="N1e-3D-ba0" id="Omg-7g-yKf"/>
+                <outlet property="statusLabel" destination="nS6-8p-tvf" id="ruI-n1-2xO"/>
+            </connections>
+        </view>
+    </objects>
+</document>

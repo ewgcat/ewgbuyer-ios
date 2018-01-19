@@ -1,0 +1,406 @@
+//
+//  BookViewController.m
+//  My_App
+//
+//  Created by 邱炯辉 on 16/6/23.
+//  Copyright © 2016年 邱炯辉. All rights reserved.
+//
+
+#import "BookViewController.h"
+#import "WXApi.h"
+
+#import "CustomActionSheet.h"
+
+#import <TencentOpenAPI/TencentOAuth.h>
+@interface BookViewController ()<CustomActionSheetDelegate,TencentSessionDelegate>
+{
+    TencentOAuth *_tencentOAuth;
+    UIImageView *v;
+
+}
+@property (nonatomic,copy)   NSString *bookurl;//这里表示授权书，只是先不替换而已
+
+@property(nonatomic,strong)UIScrollView *scrollview;
+
+
+@end
+@implementation BookViewController
+
+
+
+-(UIScrollView *)scrollview{
+    if (_scrollview==nil) {
+        _scrollview=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, ScreenFrame.size.width, ScreenFrame.size.height-64)];
+        
+        
+        _scrollview.contentSize=CGSizeMake(ScreenFrame.size.width, ScreenFrame.size.height-64+70);
+        [self.view addSubview:_scrollview];
+        
+    }
+    return _scrollview;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    self.view.backgroundColor=[UIColor whiteColor];
+    [self getData];
+}
+-(void)getData{
+    
+    [SYObject startLoading];
+    NSArray *fileContent2 = [MyUtil returnLocalUserFile];
+    NSString *urlStr=[NSString stringWithFormat:@"%@%@",FIRST_URL,@"/app/buyer/auth_license.htm"];
+
+    NSDictionary *par=@{@"user_id":[fileContent2 objectAtIndex:3],@"token":[fileContent2 objectAtIndex:1]};
+    [[Requester managerWithHeader]POST:urlStr parameters:par success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        
+        [self urlRequestSucceeded:responseObject];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error:%@",[error localizedDescription]);
+        [SYObject endLoading];
+        [SYObject failedPrompt:@"网络请求失败"];
+        
+    }];
+}
+
+#pragma mark - 网络
+-(void)urlRequestSucceeded:(id)respondData{
+    NSDictionary *dicBig =respondData;
+        NSLog(@"dicBig:%@",dicBig);
+       
+        if (dicBig[@"auth_license"]) {
+            
+            
+            NSUserDefaults *d=[NSUserDefaults standardUserDefaults];
+         NSString *name= [d valueForKey:@"level_name"];
+            if (![name isEqualToString:@"普通会员"]) {
+//                不是普通会员才可以看到
+                
+                
+                UIBarButtonItem *barItem =[[UIBarButtonItem alloc]initWithTitle:@"分享" style:UIBarButtonItemStylePlain target:self action:@selector(share)];
+                self.navigationItem.rightBarButtonItem = barItem;
+
+//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//                    // 耗时的操作
+//                    NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:dicBig[@"auth_license"]]];
+//                    UIImage *image=[[UIImage alloc]initWithData:data];
+//                    [SYObject endLoading];
+
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        // 更新界面
+//                        int  width=self.view.bounds.size.width;
+//                        
+//                        int height=image.size.height*width/image.size.width;
+//                        UIScrollView *scrollview=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-100)];
+//                        [self.view addSubview:scrollview];
+//                        scrollview.contentSize=CGSizeMake(width, height);
+//                        UIImageView *i=[[UIImageView alloc]init];
+//                        i.frame=CGRectMake(0, 0, width ,height);
+//                        i.image=image;
+//                        [self.view addSubview:i];
+//                        
+//                        [scrollview addSubview:i];
+//                        
+//                    });
+                    
+#pragma mark - demo
+                    
+                    
+                  
+                    if (dicBig[@"auth_license"]) {
+                        
+                        
+                        if (_scrollview==nil) {
+                            //保证这里只执行一行
+                            v=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, ScreenFrame.size.width, ScreenFrame.size.height-64-20)];
+                            
+                            [self.scrollview addSubview:v];
+                            
+                            UIView *bottomView=[[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(v.frame),  ScreenFrame.size.width, 70)];
+                            
+                            [self.scrollview addSubview:bottomView];
+                            
+                            UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(0, 5, ScreenFrame.size.width, 25)];
+                            label.text=@"如果您的授权书有问题,请点击下方按钮重新获取";
+                            label.textColor=[UIColor lightGrayColor];
+                            label.textAlignment=NSTextAlignmentCenter;
+                            label.font=[UIFont systemFontOfSize:15];
+                            [bottomView addSubview:label];
+                            
+                            
+                            UIButton *but=[[UIButton alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(label.frame)+5, ScreenFrame.size.width-20*2, 35)];
+                            but.backgroundColor=[UIColor redColor];
+                            but.layer.cornerRadius=10;
+                            but.layer.masksToBounds=YES;
+                            [but setTitle:@"获取授权书" forState:UIControlStateNormal];
+                            [but addTarget:self action:@selector(getBook) forControlEvents:UIControlEventTouchUpInside];
+                            
+                            [bottomView addSubview:but];
+                            
+                            //如果图片不出来的文字底部的说明
+                        }
+                        v.contentMode = UIViewContentModeScaleAspectFit;
+                        [v sd_setImageWithURL:[NSURL URLWithString:dicBig[@"auth_license"]]];
+                        _bookurl=dicBig[@"auth_license"];
+                        
+                    }
+
+                    
+        
+            }
+            else{
+                [SYObject failedPrompt:@"普通会员无法查看"];
+            
+            }
+            [SYObject endLoading];
+
+       
+        }
+        [SYObject endLoading];
+
+    
+}
+#pragma mark - 获取最新授权书
+-(void)getBook{
+    
+    NSString *urlStr= [NSString stringWithFormat:@"%@%@",FIRST_URL,@"/app/buyer/resetAuthlicense.htm"];
+    
+    NSArray *fileContent2 = [MyUtil returnLocalUserFile];
+    
+    NSDictionary *par=@{@"user_id":[fileContent2 objectAtIndex:3],@"token":[fileContent2 objectAtIndex:1]};
+    __weak typeof(self) ws= self;
+    [[Requester managerWithHeader]POST:urlStr parameters:par success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        if (responseObject[@"resetAuth_license"]) {
+            [v sd_setImageWithURL:[NSURL URLWithString:responseObject[@"resetAuth_license"]]];
+            ws.bookurl=responseObject[@"resetAuth_license"];
+        }
+
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+        [SYObject endLoading];
+        
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(void)share{
+    CustomActionSheet* sheet = [[CustomActionSheet alloc] initWithButtons:[NSArray arrayWithObjects:[CustomActionSheetButton buttonWithImage:[UIImage imageNamed:@"share_02.png"] title:@"微信联系人"],
+                                                                           [CustomActionSheetButton buttonWithImage:[UIImage imageNamed:@"share_01.png"] title:@"微信朋友圈"],
+                                                                           
+                                                                           [CustomActionSheetButton buttonWithImage:[UIImage imageNamed:@"share_05.png"] title:@"QQ好友"],
+                                                                           [CustomActionSheetButton buttonWithImage:[UIImage imageNamed:@"share_03.png"] title:@"QQ空间"],
+                                                                           nil]];
+    
+    //  明烙华把新郎微博分享取消                             [CustomActionSheetButton buttonWithImage:[UIImage imageNamed:@"share_04.png"] title:@"新浪微博"],
+    sheet.delegate=self;
+    [sheet showInView:self.navigationController.view];
+    
+    
+    
+}
+#pragma mark -CustomActionSheetDelegate
+-(void)choseAtIndex:(int)index{
+#warning 这里先用假数据
+    NSArray *dataArray = nil;
+    
+    
+    ClassifyModel *classify = [dataArray objectAtIndex:0];
+    if (index==0) {
+        //微信好友
+        if ([WXApi isWXAppInstalled]) {
+            __block shareScene scene;
+            scene = shareSceneFriends;
+            [self sharetoWechatWithTitle:classify.detail_goods_name goodsID:classify.detail_id scene:scene smallPic:classify.detail_goods_photos_small];
+        }else{
+            [OHAlertView showAlertWithTitle:@"提示" message:@"您未安装微信客户端" cancelButton:@"确定" otherButtons:nil buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex) {
+            }];
+            
+        }
+    }else if (index==1) {
+        //微信朋友圈
+        if ([WXApi isWXAppInstalled]) {
+            __block shareScene scene;
+            scene = shareSceneTimeline;
+            [self sharetoWechatWithTitle:classify.detail_goods_name goodsID:classify.detail_id scene:scene smallPic:classify.detail_goods_photos_small];
+        }else{
+            [OHAlertView showAlertWithTitle:@"提示" message:@"您未安装微信客户端" cancelButton:@"确定" otherButtons:nil buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex) {
+            }];
+            
+        }
+    }else if (index==2) {
+        //        //新浪shareSceneWeiBo
+        //        [SYShopAccessTool sharetoWeiboWithTitle:classify.detail_goods_name goodsID:classify.detail_id smallPic:classify.detail_goods_photos_small];
+        //    }else if (index==3) {
+        //qq好友
+        [self initTence];
+        [self sharetoQQWithTitle:classify.detail_goods_name goodsID:classify.detail_id smallPic:classify.detail_goods_photos_small];
+        
+    }else  if (index==3) {
+        //qq空间
+        [self initTence];
+        [self sharetoQQTimelineWithTitle:classify.detail_goods_name goodsID:classify.detail_id smallPic:classify.detail_goods_photos_small];
+    }
+}
+-(void)initTence{
+    _tencentOAuth=[[TencentOAuth alloc]initWithAppId:__TencentDemoAppid_ andDelegate:self];
+    
+}
+#pragma mark -TencentSessionDelegate
+-(void)tencentDidNotNetWork{
+    
+    
+}
+-(void)tencentDidLogin{
+    
+    
+}
+-(void)tencentDidNotLogin:(BOOL)cancelled{
+    
+    
+    
+}
+#pragma mark -后来添加的分享
+-(void)sharetoWechatWithTitle:(NSString *)title goodsID:(NSString *)goodsID scene:(shareScene)scene smallPic:(NSString *)smallPic{
+    
+    SendMessageToWXReq *sm = [[SendMessageToWXReq alloc]init];
+    
+    //发送多媒体信息
+    WXMediaMessage *msg = [WXMediaMessage message];
+    
+    //标题
+    msg.title = @"分享";
+    
+    //描述
+    msg.description = @"您正在分享你的授权书";
+    
+    //缩略图
+    NSURL *url = [NSURL URLWithString:smallPic];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    if (data) {
+        msg.thumbData = data;
+    }
+    
+    //链接
+    WXWebpageObject *web = [WXWebpageObject object];
+    //    NSString *suffix = @"/wap/goods.htm?id=";
+    //    NSString *url1 = [NSString stringWithFormat:@"%@%@%@",FIRST_URL,suffix,goodsID];
+    //取出保存在plist文件中的邀请码跟二维码
+//    NSUserDefaults *d=[NSUserDefaults standardUserDefaults];
+//    NSString *_qrcode_img_path= [d valueForKey:@"qrcode_img_path"];
+    
+    
+    web.webpageUrl = _bookurl;
+    msg.mediaObject = web;
+    
+    //暂时用不着
+    //    msg.mediaTagName = @"我是mediaTagName";
+    //    msg.messageExt = @"我是messageExt";
+    
+    sm.message = msg;
+    switch (scene) {
+        case shareSceneFriends:{
+            sm.scene = WXSceneSession;
+            break;
+        }
+        case shareSceneTimeline:{
+            sm.scene = WXSceneTimeline;
+            break;
+        }
+    }
+    [WXApi sendReq:sm];
+}
+-(void)sharetoQQWithTitle:(NSString *)title goodsID:(NSString *)goodsID smallPic:(NSString *)smallPic{
+    //取出保存在plist文件中的邀请码跟二维码
+    NSUserDefaults *d=[NSUserDefaults standardUserDefaults];
+    NSString *_qrcode_img_path= [d valueForKey:@"qrcode_img_path"];
+    
+    
+    
+    
+    NSString *utf8String = _qrcode_img_path;
+    NSString *description = @"您正在分享你的授权书";
+    NSString *previewImageUrl = _bookurl;
+    QQApiNewsObject *newsObj = [QQApiNewsObject
+                                objectWithURL:[NSURL URLWithString:utf8String]
+                                title:@"分享"
+                                description:description
+                                previewImageURL:[NSURL URLWithString:previewImageUrl]];
+    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObj];
+    //将内容分享到qq
+    QQApiSendResultCode sent = [QQApiInterface sendReq:req];
+    //将内容分享到qzone
+    //    QQApiSendResultCode sent = [QQApiInterface SendReqToQZone:req];
+    [self handleSendResult:sent];
+    
+    
+    
+}
+-(void)sharetoQQTimelineWithTitle:(NSString *)title goodsID:(NSString *)goodsID smallPic:(NSString *)smallPic{
+    //取出保存在plist文件中的邀请码跟二维码
+    NSUserDefaults *d=[NSUserDefaults standardUserDefaults];
+    NSString *_qrcode_img_path= [d valueForKey:@"qrcode_img_path"];
+    
+    
+    NSString *utf8String = _bookurl;
+    NSString *description = @"您正在分享你的授权书";
+    NSString *previewImageUrl = _qrcode_img_path;
+    QQApiNewsObject *newsObj = [QQApiNewsObject
+                                objectWithURL:[NSURL URLWithString:utf8String]
+                                title:@"分享"
+                                description:description
+                                previewImageURL:[NSURL URLWithString:previewImageUrl]];
+    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObj];
+    //将内容分享到qq
+    //    QQApiSendResultCode sent = [QQApiInterface sendReq:req];
+    //将内容分享到qzone
+    QQApiSendResultCode sent = [QQApiInterface SendReqToQZone:req];
+    [self handleSendResult:sent];
+    
+    
+    
+}
+-(void)handleSendResult:(QQApiSendResultCode)sendResult{
+    NSString *message;
+    switch (sendResult) {
+        case EQQAPIAPPNOTREGISTED:
+            message=@"该APP未被注册";
+            break;
+        case EQQAPIMESSAGETYPEINVALID:
+        case EQQAPIMESSAGECONTENTNULL:
+        case EQQAPIMESSAGECONTENTINVALID:
+            message=@"发送参数错误";
+            break;
+        case EQQAPIQQNOTINSTALLED:
+        case EQQAPIQQNOTSUPPORTAPI:
+            message=@"未安装QQ客户端";
+            [OHAlertView showAlertWithTitle:@"提示" message:@"你还未安装手机qq客户端" cancelButton:nil otherButtons:@[@"确定"] buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex) {
+                
+            }];
+            break;
+        case EQQAPISENDFAILD:
+            message=@"发送失败";
+            break;
+        default:
+            message=@"未知错误";
+            break;
+    }
+    NSLog(@"%@",message);
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

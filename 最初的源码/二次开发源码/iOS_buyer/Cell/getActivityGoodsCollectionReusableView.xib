@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="getActivityGoodsCollectionReusableView" id="U6b-Vx-4bR" customClass="getActivityGoodsCollectionReusableView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="178"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iNJ-Mm-Bxj">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="148"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.92941176469999998" green="0.088454861110000005" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zVA-K1-npX">
+                    <rect key="frame" x="15" y="148" width="290" height="30"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.97254901959999995" green="0.2657696759" blue="0.035294117649999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <animations/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="iNJ-Mm-Bxj" secondAttribute="trailing" id="061-Rq-UUA"/>
+                <constraint firstItem="iNJ-Mm-Bxj" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" id="1WQ-AA-cGU"/>
+                <constraint firstAttribute="bottom" secondItem="zVA-K1-npX" secondAttribute="bottom" id="aFZ-Le-WY3"/>
+                <constraint firstItem="zVA-K1-npX" firstAttribute="top" secondItem="iNJ-Mm-Bxj" secondAttribute="bottom" id="eGx-Cr-5Ts"/>
+                <constraint firstAttribute="trailing" secondItem="zVA-K1-npX" secondAttribute="trailing" constant="15" id="gGc-Hc-ryN"/>
+                <constraint firstItem="iNJ-Mm-Bxj" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="lb6-fo-0v5"/>
+                <constraint firstAttribute="bottom" secondItem="iNJ-Mm-Bxj" secondAttribute="bottom" constant="30" id="mBP-ts-S8f"/>
+                <constraint firstItem="zVA-K1-npX" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="15" id="nz1-DI-7nn"/>
+            </constraints>
+            <connections>
+                <outlet property="ImageViewTop" destination="iNJ-Mm-Bxj" id="OhB-qk-6nl"/>
+                <outlet property="TimeLabel" destination="zVA-K1-npX" id="j7K-aC-Fxh"/>
+            </connections>
+            <point key="canvasLocation" x="1337" y="291"/>
+        </collectionReusableView>
+    </objects>
+</document>

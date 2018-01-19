@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="classCell" rowHeight="116" id="KGk-i7-Jjw" customClass="OneYuanClassCell">
+            <rect key="frame" x="0.0" y="0.0" width="433" height="116"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="433" height="115"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OhR-96-oaU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NsZ-so-pDg" customClass="LeftRightButton">
+                                <rect key="frame" x="-37" y="-31" width="163" height="103"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="全部商品" image="share_01.png">
+                                    <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="imgWidth">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="imgHeight">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="midXRatio">
+                                        <real key="value" value="0.29999999999999999"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="midSpace">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BqS-de-lUv" customClass="LeftRightButton">
+                                <rect key="frame" x="43" y="-30" width="163" height="103"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="手机平板" image="share_01.png">
+                                    <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="imgWidth">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="imgHeight">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="midXRatio">
+                                        <real key="value" value="0.29999999999999999"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="midSpace">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2jB-Oa-u8a" customClass="LeftRightButton">
+                                <rect key="frame" x="171" y="-31" width="163" height="103"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="imgWidth">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="imgHeight">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="midXRatio">
+                                        <real key="value" value="0.29999999999999999"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="midSpace">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vho-15-E6x">
+                                <rect key="frame" x="0.0" y="44" width="320" height="1"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.8901960784313725" green="0.8901960784313725" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="do0-Na-9G1"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BqS-de-lUv" firstAttribute="centerY" secondItem="OhR-96-oaU" secondAttribute="centerY" id="0CJ-me-a6d"/>
+                            <constraint firstAttribute="bottom" secondItem="Vho-15-E6x" secondAttribute="bottom" constant="-1" id="0Qx-ms-rLK"/>
+                            <constraint firstItem="BqS-de-lUv" firstAttribute="top" secondItem="OhR-96-oaU" secondAttribute="top" constant="10" id="19H-lU-oAw"/>
+                            <constraint firstAttribute="trailing" secondItem="Vho-15-E6x" secondAttribute="trailing" id="44S-aR-maS"/>
+                            <constraint firstItem="NsZ-so-pDg" firstAttribute="leading" secondItem="OhR-96-oaU" secondAttribute="leading" id="4mI-fd-30e"/>
+                            <constraint firstAttribute="bottom" secondItem="NsZ-so-pDg" secondAttribute="bottom" id="6VS-4I-3ac"/>
+                            <constraint firstItem="NsZ-so-pDg" firstAttribute="centerY" secondItem="OhR-96-oaU" secondAttribute="centerY" id="Ae0-dp-TCm"/>
+                            <constraint firstAttribute="bottom" secondItem="2jB-Oa-u8a" secondAttribute="bottom" id="Keu-QZ-I0O"/>
+                            <constraint firstItem="Vho-15-E6x" firstAttribute="leading" secondItem="OhR-96-oaU" secondAttribute="leading" id="XCz-t4-XX4"/>
+                            <constraint firstItem="BqS-de-lUv" firstAttribute="height" secondItem="NsZ-so-pDg" secondAttribute="height" id="cgm-9f-Xn6"/>
+                            <constraint firstItem="2jB-Oa-u8a" firstAttribute="leading" secondItem="BqS-de-lUv" secondAttribute="trailing" id="cnY-gf-Kj1"/>
+                            <constraint firstAttribute="trailing" secondItem="2jB-Oa-u8a" secondAttribute="trailing" id="dB5-m9-UGx"/>
+                            <constraint firstItem="2jB-Oa-u8a" firstAttribute="height" secondItem="NsZ-so-pDg" secondAttribute="height" id="eCO-u3-u6A"/>
+                            <constraint firstItem="2jB-Oa-u8a" firstAttribute="width" secondItem="NsZ-so-pDg" secondAttribute="width" id="elx-Ph-Dju"/>
+                            <constraint firstItem="BqS-de-lUv" firstAttribute="leading" secondItem="NsZ-so-pDg" secondAttribute="trailing" id="emE-yn-bGa"/>
+                            <constraint firstItem="BqS-de-lUv" firstAttribute="width" secondItem="NsZ-so-pDg" secondAttribute="width" id="hp7-Wr-zWJ"/>
+                            <constraint firstItem="2jB-Oa-u8a" firstAttribute="top" secondItem="OhR-96-oaU" secondAttribute="top" constant="10" id="i18-tg-6I2"/>
+                            <constraint firstItem="NsZ-so-pDg" firstAttribute="top" secondItem="OhR-96-oaU" secondAttribute="top" constant="10" id="qHU-qp-FvP"/>
+                            <constraint firstItem="2jB-Oa-u8a" firstAttribute="centerY" secondItem="OhR-96-oaU" secondAttribute="centerY" id="uFa-kW-nHT"/>
+                            <constraint firstAttribute="bottom" secondItem="BqS-de-lUv" secondAttribute="bottom" id="uW8-bZ-plg"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="6VS-4I-3ac"/>
+                                <exclude reference="qHU-qp-FvP"/>
+                                <exclude reference="19H-lU-oAw"/>
+                                <exclude reference="uW8-bZ-plg"/>
+                                <exclude reference="Keu-QZ-I0O"/>
+                                <exclude reference="i18-tg-6I2"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="OhR-96-oaU" secondAttribute="bottom" constant="-9" id="5px-FT-41n"/>
+                    <constraint firstItem="OhR-96-oaU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="7OQ-op-V6k"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="OhR-96-oaU" secondAttribute="trailing" constant="-8" id="IaR-8t-vbU"/>
+                    <constraint firstItem="OhR-96-oaU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="hGc-iH-ING"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="firstBtn" destination="NsZ-so-pDg" id="Ulx-Vz-agP"/>
+                <outlet property="secondBtn" destination="BqS-de-lUv" id="XNm-he-CKj"/>
+                <outlet property="thirdBtn" destination="2jB-Oa-u8a" id="0oz-M9-vjN"/>
+            </connections>
+            <point key="canvasLocation" x="396.5" y="423"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="share_01.png" width="103" height="103"/>
+    </resources>
+</document>

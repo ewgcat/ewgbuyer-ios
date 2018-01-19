@@ -1,0 +1,195 @@
+//
+//  SellerApp-Prefix.pch
+//  SellerApp
+//
+//  Created by apple on 15-3-17.
+//  Copyright (c) 2015年 apple. All rights reserved.
+//
+
+#ifndef SellerApp_SellerApp_Prefix_pch
+#define SellerApp_SellerApp_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#endif
+
+#define VERIFY @"verify"
+#define ScreenFrame [[UIScreen mainScreen]bounds]//适配屏幕尺寸
+#define UIDeviceSystem [[[UIDevice currentDevice] systemVersion]floatValue]//系统版本号
+#define USER_INFORMATION [[NSArray alloc] initWithContentsOfFile:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"user_information.txt"]]
+
+
+
+//******************************************颜色值******************************************
+#define _K_Color(R,G,B)     [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1]
+#define NAV_COLOR [UIColor colorWithRed:21/255.0f green:164/255.0f blue:255.0f/255.0f alpha:1]
+#define GRAY_COLOR [UIColor colorWithRed:236/255.0f green:235/255.0f blue:241/255.0f alpha:1]
+#define LINE_COLOR [UIColor colorWithRed:235/255.0f green:235/255.0f blue:235/255.0f alpha:1]
+#define EXITBUTTON_COLOR [UIColor colorWithRed:32/255.0f green:183/255.0f blue:252/255.0f alpha:1]
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+
+#pragma mark - 接口宏定义
+
+//************************************推送绑定************************************
+#define PUSH_URL @"/app/push_bind.htm"
+
+//************************************登录************************************215:90
+//#define SELLER_URL @"http://b2b2c.iskyshop.com"
+#define SELLER_URL @"http://mall.eovip.com"
+
+
+/*
+ @"http://192.168.1.238"
+ @"http://b2b2c.iskyshop.com"
+ */
+#define USERLOGIN_URL @"/app/iskyshop_seller_login.htm"
+
+//************************************订单************************************
+#define ORDER_LIST_URL @"/app/seller/order_list.htm"
+#define MODIFYPRICE_SAVE_URL @"/app/seller/order_fee_save.htm"//订单取消
+#define ORDER_DETAIL_URL @"/app/seller/order_detail.htm"//订单详情
+
+//************************************订单价格调整************************************
+#define MODIFYPRICE_URL @"/app/seller/order_fee.htm"
+#define MODIFYPRICE_CANCELSAVE_URL @"/app/seller/order_cancel_save.htm"
+
+//************************************发货************************************
+#define DELIVERGOODS_URL @"/app/seller/order_shipping.htm"
+#define DELIVERGOODS_SAVE_URL @"/app/seller/order_shipping_save.htm"
+
+//************************************物流************************************
+#define LOGISTICS_URL @"/app/seller/order_shipping_code.htm"
+#define LOGISTICS_SAVE_URL @"/app/seller/order_shipping_code_save.htm"
+
+//************************************延长收货时间************************************
+#define DELAYTIMES_SAVE_URL @"/app/seller/order_confirm_delay_save.htm"
+
+//************************************商品************************************
+#define GOODS_LIST_URL @"/app/seller/goods_list.htm"//商家商品列表
+#define GOODS_CLASS_URL @"/app/seller/goods_class.htm"//商品分类
+#define GOODS_EDIT_URL @"/app/seller/goods_edit.htm"//商家详情编辑
+#define GOODS_SPECIFICATION_URL @"/app/seller/goodsSpecification.htm"//商家编辑详情
+#define GOODS_SPECIFICATIONHOLD_URL @"/app/seller/goodsSpecificationHold.htm"//商家编辑保存
+#define GOODS_EDIT_SAVE_URL @"/app/seller/goods_edit_save.htm"//编辑保存
+
+//************************************店铺总览************************************
+#define STORE_URL @"/app/seller/store_index.htm"//店铺总览
+#define STORE_GOODS_CLASSIFY_URL @"/app/seller/goods_class.htm"//店铺 商品分类
+#define STORE_GOODS_DELETE_URL @"/app/seller/goods_del.htm"//删除
+#define STORE_GOODS_DOWN_SHELVES_URL @"/app/seller/goods_sale.htm"//上下架
+//************************************首页************************************
+#define HOME_URL @"/app/seller/information.htm"  //首页信息
+#define STATISTIC_INCLUDE_URL @"/app/seller/statistics.htm" //统计概况
+#define STATISTIC_ACCESS_URL @"/app/seller/accessScheduling.htm" //统计访问
+#define STATISTIC_PAY_URL @"/app/seller/salesVolume.htm" //统计支付
+#define NEWS_CLASS_URL @"/app/seller/articleClass.htm" //公告分类查询
+#define NEWS_LIST_URL @"/app/seller/article.htm" //公告列表查询
+#define NEWS_WEB_URL @"/app/articleText.htm" //公告详情查询
+#define EVALUATE_LIST_URL @"/app/seller/evaluate_list.htm" //评价列表
+#define EVALUATE_DETAIL_URL @"/app/seller/evaluate.htm" //评价详情
+#define EVALUATE_REPLY_URL @"/app/seller/evaluate_reply.htm" //评价回复
+
+//************************************聊天************************************
+#define CHAT_URL @"/app/seller/chat_index.htm"//聊天
+#define CHAT_LOG_URL @"/app/seller/chat_log.htm"//聊天记录查询
+#define CHAT_SEND_URL @"/app/seller/chat_send.htm"//聊天发送
+#define CHAT_SEARCH_URL @"/app/seller/chatting_logs_refresh.htm"//新的聊天记录查询
+
+//************************************常用物流配置************************************
+#define ECC_SET_URL @"/app/seller/ecc_set.htm"
+#define ECC_SAVE_URL @"/app/seller/ecc_save.htm"
+#define ECC_DEFAULT_URL @"/app/seller/ecc_default.htm"
+#define ECC_DEFAULT_CANCE_URL @"/app/seller/ecc_default_cancle.htm"
+
+//************************************发货地址管理************************************
+#define SHIP_ADDR_URL @"/app/seller/ship_address.htm"
+#define SHIP_ADDR_EDIT_URL @"/app/seller/ship_address_edit.htm"
+#define SHIP_ADDR_SAVE_URL @"/app/seller/ship_address_save.htm"
+#define SHIP_ADDR_DEL_URL @"/app/seller/ship_address_del.htm"
+#define SHIP_ADDR_DEFAULT_URL @"/app/seller/ship_address_default.htm"
+#define REGION_URL @"/app/area_load.htm"
+
+//************************************搜索************************************
+#define ORDERLIST_SERACH_URL @"/app/seller/order_search.htm"//搜索
+
+//************************************账单************************************
+#define PAYOFFLOG_URL @"/app/seller/payoffLog_list.htm"//结算账单列表
+#define PAYOFFLOG_DETAIL_URL @"/app/seller/payoffLog_detail.htm"//账单详情
+#define PAYOFFLOG_COMMIT @"/app/seller/payofflog_edit.htm"//请求结算
+
+//************************************网页端************************************
+#define GOODSPREVIEW_URL @"/wap/goods.htm"//商品预览
+
+//*****************************AppStoreURL******************************************
+#define APPSTORE_URL @"itms-apps://itunes.apple.com/us/app/iskyshop-b2b2c/id975791093?l=zh&ls=1&mt=8"
+//************************************团购验证************************************
+#define GROUP_VERIFY_URL @"/app/seller/group_number_experimental.htm"//团购码验证
+
+//************************************通知页面************************************
+#define STORE_MSG_URL @"/app/seller/letterStation.htm"//站内信
+#define STOCK_WARNING_URL @"/app/seller/earlyWarning.htm"//库存预警
+#define REFUND_URL @"/app/seller/refund.htm"//退货退款
+#define REFUND_BTN_URL @"/app/seller/refund_audit.htm"//退款
+#define RETURN_BTN_URL @"/app/seller/return_check_save.htm"//退货
+#define RETURN_LIST_URL @"/app/seller/return_list.htm"//退货列表
+#define REFUND_LIST_URL @"/app/seller/refund_list.htm"//退款列表
+#define RETURN_SURE_URL @"/app/seller/return_confirm.htm"//确认收货
+#define CHAT_INDEX_URL @"/app/seller/chat_index.htm"//聊天首页
+
+//************************************设置界面************************************
+#define IMG_UPLOAD_URL @"/app/image_upload.htm" //上传图片,参数:用户信息和image(base64)
+#define SET_SELLER_INFO_URL @"/app/seller/store_edit_save.htm"//保存店铺信息
+#define SHOW_SELLER_INFO_URL @"/app/seller/store_edit.htm"//显示店铺名称
+
+#pragma mark - storeboard
+//获取主故事模板
+#define _K_MainStoryboard   [UIStoryboard storyboardWithName:@"Main" bundle:nil]
+
+//获取工作台故事模板
+#define _K_WorkBenchStoryboard   [UIStoryboard storyboardWithName:@"WorkBench" bundle:nil]
+
+//获取聊天故事模板
+#define _K_ChatStoryboard   [UIStoryboard storyboardWithName:@"Chat" bundle:nil]
+
+//获取设置故事模板
+#define _K_SettingStoryboard   [UIStoryboard storyboardWithName:@"Setting" bundle:nil]
+
+#ifdef __OBJC__
+
+#import "PullToRefreshTableView.h"
+#import "myAfnetwork.h"
+#import "myselfParse.h"
+#import "LJControl.h"
+#import "AppDelegate.h"
+#import "MyNetTool.h"
+#import "MyObject.h"
+#import "OHAlertView.h"
+#import "UIView+setFrame.h"
+#import "MJRefresh.h"
+#import "BaseViewControllerNoTabbar.h"
+#import "UIImageView+WebCache.h"
+
+#ifndef __OPTIMIZE__
+#define NSLog(...) NSLog(__VA_ARGS__)
+#else
+#define NSLog(...) {}
+#endif
+
+#endif
+
+
+
+
+
+
+
+
+
+
+

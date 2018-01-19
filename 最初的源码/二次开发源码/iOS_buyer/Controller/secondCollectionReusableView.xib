@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="secondCollectionReusableView" id="hCu-f5-IlO" customClass="secondCollectionReusableView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="二级分类" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kHL-h9-XCM">
+                    <rect key="frame" x="15" y="0.0" width="305" height="40"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstItem="kHL-h9-XCM" firstAttribute="top" secondItem="hCu-f5-IlO" secondAttribute="top" id="HH5-Mt-pTK"/>
+                <constraint firstItem="kHL-h9-XCM" firstAttribute="leading" secondItem="hCu-f5-IlO" secondAttribute="leading" constant="15" id="lAd-lP-ZH1"/>
+                <constraint firstAttribute="trailing" secondItem="kHL-h9-XCM" secondAttribute="trailing" id="oC9-OW-5JG"/>
+                <constraint firstAttribute="bottom" secondItem="kHL-h9-XCM" secondAttribute="bottom" id="wpQ-2X-68B"/>
+            </constraints>
+            <point key="canvasLocation" x="444" y="364"/>
+        </collectionReusableView>
+    </objects>
+</document>

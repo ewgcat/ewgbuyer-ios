@@ -1,0 +1,77 @@
+//
+//  IntegralCell.m
+//  My_App
+//
+//  Created by apple on 15-1-13.
+//  Copyright (c) 2015年 apple. All rights reserved.
+//
+
+#import "IntegralCell.h"
+
+@implementation IntegralCell
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self)
+    {
+        // 初始化时加载collectionCell.xib文件
+        NSArray *arrayOfViews = [[NSBundle mainBundle] loadNibNamed:@"IntegralCell" owner:self options:nil];
+        
+        // 如果路径不存在，return nil
+        if (arrayOfViews.count < 1)
+        {
+            return nil;
+        }
+        // 如果xib中view不属于UICollectionViewCell类，return nil
+        if (![[arrayOfViews objectAtIndex:0] isKindOfClass:[UICollectionViewCell class]])
+        {
+            return nil;
+        }
+        // 加载nib
+        self = [arrayOfViews objectAtIndex:0];
+    }
+    return self;
+}
+-(CGRect )labelSizeHeight:(NSString *)labeltext frame:(CGRect)frame font:(NSInteger )myfont{
+    UILabel *labelTiecontent = [[UILabel alloc]init];
+    labelTiecontent.numberOfLines = 0;
+    labelTiecontent.font = [UIFont systemFontOfSize:myfont];
+    labelTiecontent.text = labeltext;
+    CGRect labelFrameTie = frame;
+    labelFrameTie.size = [labelTiecontent sizeThatFits:CGSizeMake(ScreenFrame.size.width-frame.origin.x*2,  0)];
+    return labelFrameTie;
+}
+- (void)awakeFromNib {
+    // Initialization code
+    _IntegralLabel = [[UILabel alloc]initWithFrame:CGRectMake(200, 53, 40, 20)];
+    _IntegralLabel.text = @"积分";
+    _IntegralLabel.textColor = [UIColor lightGrayColor];
+    _IntegralLabel.font = [UIFont systemFontOfSize:10];
+    [self addSubview:_IntegralLabel];
+    _levelImage = [[UIImageView alloc]initWithFrame:CGRectMake(200, 52, 15, 24)];
+    [self addSubview:_levelImage];
+}
+-(void)setData:(Model *)shjm{
+    [_goodsImage sd_setImageWithURL:[NSURL URLWithString:shjm.ig_goods_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+    _goodsName.text = shjm.ig_goods_name;
+    _goodsIntegral.text = [NSString stringWithFormat:@"%@",shjm.ig_goods_integral];
+    _goodsCount.text = [NSString stringWithFormat:@"剩余:%@件",shjm.igc_count];
+    if ([shjm.ig_user_level isEqualToString:@"铜牌会员"]) {
+        _levelImage.image = [UIImage imageNamed:@"userlevel_0"];
+    }
+    else if ([shjm.ig_user_level isEqualToString:@"银牌会员"]){
+        _levelImage.image = [UIImage imageNamed:@"userlevel_1"];
+    }
+    else if ([shjm.ig_user_level isEqualToString:@"金牌会员"]){
+        _levelImage.image = [UIImage imageNamed:@"userlevel_2"];
+    }
+    else if ([shjm.ig_user_level isEqualToString:@"钻石会员"]){
+        _levelImage.image = [UIImage imageNamed:@"userlevel_3"];
+    }
+    _UserLevel.text=shjm.ig_user_level;
+    CGRect labelFrame=[self labelSizeHeight:_goodsIntegral.text frame:CGRectMake(15, 0, 0.0, 0.0) font:18];
+    _IntegralLabel.frame = CGRectMake(120+labelFrame.size.width+14, 58, 38, 20);
+    CGRect labelFrame2=[self labelSizeHeight:_UserLevel.text frame:CGRectMake(15, 0, 0.0, 0.0) font:12];
+    _levelImage.frame = CGRectMake(ScreenFrame.size.width-10-15-4-labelFrame2.size.width, 59, 15, 24);
+}
+@end

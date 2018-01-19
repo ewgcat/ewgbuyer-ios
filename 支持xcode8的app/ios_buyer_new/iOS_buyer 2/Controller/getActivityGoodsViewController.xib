@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="getActivityGoodsViewController">
+            <connections>
+                <outlet property="MyCollectionView" destination="Hig-db-kd5" id="MJH-PT-bg7"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="seller_center_nothing.png" translatesAutoresizingMaskIntoConstraints="NO" id="RnS-Iv-xst">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="100" id="0ar-05-1Ok">
+                            <variation key="heightClass=regular-widthClass=compact" constant="263"/>
+                        </constraint>
+                        <constraint firstAttribute="width" constant="100" id="h0P-WF-MLr">
+                            <variation key="heightClass=regular-widthClass=compact" constant="263"/>
+                        </constraint>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="0ar-05-1Ok"/>
+                            <exclude reference="h0P-WF-MLr"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="0ar-05-1Ok"/>
+                            <include reference="h0P-WF-MLr"/>
+                        </mask>
+                    </variation>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未找到数据" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bTO-Uy-6CE">
+                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="alQ-1r-9St"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="alQ-1r-9St"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="alQ-1r-9St"/>
+                        </mask>
+                    </variation>
+                </label>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Hig-db-kd5">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="30K-Q7-d8g">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="bTO-Uy-6CE" firstAttribute="top" secondItem="RnS-Iv-xst" secondAttribute="bottom" constant="40" id="40b-sM-cQO">
+                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="bTO-Uy-6CE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Cob-6L-C0c"/>
+                <constraint firstAttribute="bottom" secondItem="Hig-db-kd5" secondAttribute="bottom" id="El2-LN-HLi"/>
+                <constraint firstItem="Hig-db-kd5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="IdU-n9-E4D"/>
+                <constraint firstAttribute="trailing" secondItem="Hig-db-kd5" secondAttribute="trailing" id="Qln-BZ-qL1"/>
+                <constraint firstItem="RnS-Iv-xst" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="ROR-ZL-fTD"/>
+                <constraint firstItem="RnS-Iv-xst" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="TU4-Eg-CFE"/>
+                <constraint firstItem="Hig-db-kd5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="c9b-Dj-hWg"/>
+                <constraint firstAttribute="trailing" secondItem="bTO-Uy-6CE" secondAttribute="trailing" id="nH5-2q-XpN"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="RnS-Iv-xst"/>
+                    <exclude reference="bTO-Uy-6CE"/>
+                    <exclude reference="Hig-db-kd5"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="El2-LN-HLi"/>
+                    <exclude reference="IdU-n9-E4D"/>
+                    <exclude reference="Qln-BZ-qL1"/>
+                    <exclude reference="c9b-Dj-hWg"/>
+                    <exclude reference="ROR-ZL-fTD"/>
+                    <exclude reference="TU4-Eg-CFE"/>
+                    <exclude reference="40b-sM-cQO"/>
+                    <exclude reference="Cob-6L-C0c"/>
+                    <exclude reference="nH5-2q-XpN"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="RnS-Iv-xst"/>
+                    <include reference="bTO-Uy-6CE"/>
+                    <include reference="Hig-db-kd5"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="El2-LN-HLi"/>
+                    <include reference="IdU-n9-E4D"/>
+                    <include reference="Qln-BZ-qL1"/>
+                    <include reference="c9b-Dj-hWg"/>
+                    <include reference="ROR-ZL-fTD"/>
+                    <include reference="TU4-Eg-CFE"/>
+                    <include reference="40b-sM-cQO"/>
+                    <include reference="Cob-6L-C0c"/>
+                    <include reference="nH5-2q-XpN"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="336" y="448"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="seller_center_nothing.png" width="314" height="314"/>
+    </resources>
+</document>

@@ -1,0 +1,599 @@
+//
+//  MyMessageViewController.m
+//  My_App
+//
+//  Created by apple on 14-8-6.
+//  Copyright (c) 2014年 apple. All rights reserved.
+//
+
+#import "MyMessageViewController.h"
+#import "ASIFormDataRequest.h"
+#import "MyMessageModel.h"
+#import "FirstViewController.h"
+#import "ThreeDotView.h"
+
+#import "MessageTableViewCell.h"
+
+
+@interface MyMessageViewController ()<UIGestureRecognizerDelegate>
+{
+}
+
+@property (nonatomic,strong)NSMutableDictionary *seletedDic;// 选中
+
+@property (assign)NSUInteger lastCount;
+
+
+
+@end
+
+@implementation MyMessageViewController
+- (IBAction)tabbarBtnClicked:(id)sender{
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    UIButton *btn = (UIButton *)sender;
+    FirstViewController *first = [FirstViewController sharedUserDefault];
+    if (btn.tag == 101) {
+        [first tabbarIndex:0];
+    }else if (btn.tag == 102) {
+        [first tabbarIndex:1];
+    }else if (btn.tag == 103) {
+        [first tabbarIndex:2];
+    }else if (btn.tag == 104) {
+        [first tabbarIndex:3];
+    }else{
+        [first tabbarIndex:4];
+    }
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:YES];
+    [requestMessage1 clearDelegatesAndCancel];
+    [requestMessage2 clearDelegatesAndCancel];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    self.tabBarController.tabBar.hidden = YES;
+    promptView.hidden=YES;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    requestBool = NO;
+    secondBtn.hidden=YES;
+    thirdBtn.hidden=YES;
+    fouthBtn.hidden=YES;
+    fifthBtn.hidden=YES;
+    [self createBackBtn];
+    [self createBackBtn1];
+
+    self.title = @"我的消息";
+    self.view.backgroundColor = UIColorFromRGB(0Xf0f0f0);
+    
+    if (UIDeviceHao>=7.0) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }else{
+    }
+    
+    shjTableView.backgroundColor = [UIColor clearColor];
+    shjTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    shjTableView.delegate = self;
+    shjTableView.dataSource= self;
+    shjTableView.showsVerticalScrollIndicator = YES;
+    shjTableView.showsHorizontalScrollIndicator = NO;
+    [shjTableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    [SYObject startLoading];
+    
+    NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsPath = [docPath objectAtIndex:0];
+    NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+    if (!readPath2) {
+        return;
+    }
+    NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,MESSAGE_URL]];
+    requestMessage1 = [ASIFormDataRequest requestWithURL:url];
+    [requestMessage1 setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+    [requestMessage1 setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+    
+    [requestMessage1 setPostValue:@"0" forKey:@"beginCount"];
+    [requestMessage1 setPostValue:@"20" forKey:@"selectCount"];
+    
+    [requestMessage1 setRequestHeaders:[LJControl requestHeaderDictionary]];
+    requestMessage1.tag = 101;
+    [requestMessage1 setDelegate:self];
+    [requestMessage1 setDidFailSelector:@selector(urlRequestFailed:)];
+    [requestMessage1 setDidFinishSelector:@selector(urlRequestSucceeded:)];
+    [requestMessage1 startAsynchronous];
+    muchBool = NO;
+    muchView.hidden = YES;
+    [grayMuchImage.layer setMasksToBounds:YES];
+    [grayMuchImage.layer setCornerRadius:4];
+    
+
+}
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+        
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    dataArrShangla = [[NSMutableArray alloc]init];
+    dataArr = [[NSMutableArray alloc]init];
+    
+    _seletedDic=[NSMutableDictionary dictionary];
+       if ([[[UIDevice currentDevice] systemVersion] floatValue]>= 7.0) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    requestBool = NO;
+    secondBtn.hidden=YES;
+    thirdBtn.hidden=YES;
+    fouthBtn.hidden=YES;
+    fifthBtn.hidden=YES;
+    [self createBackBtn];
+    [self createBackBtn1];
+  
+    self.title = @"我的消息";
+    self.view.backgroundColor = UIColorFromRGB(0Xf0f0f0);
+   
+    if (UIDeviceHao>=7.0) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }else{
+    }
+    shjTableView.backgroundColor = [UIColor clearColor];
+    shjTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    shjTableView.delegate = self;
+    shjTableView.dataSource= self;
+    shjTableView.showsVerticalScrollIndicator = YES;
+    shjTableView.showsHorizontalScrollIndicator = NO;
+    [shjTableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    //[SYObject startLoading];
+    
+    NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsPath = [docPath objectAtIndex:0];
+    NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+    NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,MESSAGE_URL]];
+    requestMessage1 = [ASIFormDataRequest requestWithURL:url];
+    [requestMessage1 setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+    [requestMessage1 setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+    
+    [requestMessage1 setPostValue:@"0" forKey:@"beginCount"];
+    [requestMessage1 setPostValue:@"20" forKey:@"selectCount"];
+    
+    [requestMessage1 setRequestHeaders:[LJControl requestHeaderDictionary]];
+    requestMessage1.tag = 101;
+    [requestMessage1 setDelegate:self];
+    [requestMessage1 setDidFailSelector:@selector(urlRequestFailed:)];
+    [requestMessage1 setDidFinishSelector:@selector(urlRequestSucceeded:)];
+    [requestMessage1 startAsynchronous];
+    muchBool = NO;
+    muchView.hidden = YES;
+    [grayMuchImage.layer setMasksToBounds:YES];
+    [grayMuchImage.layer setCornerRadius:4];
+    
+    
+#pragma mark - 注册cell 
+    
+    [shjTableView registerClass:[MessageTableViewCell class] forCellReuseIdentifier:@"MessageTableViewCell"];
+  
+}
+-(void)headerRereshing
+{
+    NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsPath = [docPath objectAtIndex:0];
+    NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+    NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,MESSAGE_URL]];
+    requestMessage1 = [ASIFormDataRequest requestWithURL:url];
+    [requestMessage1 setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+    [requestMessage1 setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+    
+    [requestMessage1 setPostValue:@"0" forKey:@"beginCount"];
+    [requestMessage1 setPostValue:@"20" forKey:@"selectCount"];
+    
+    [requestMessage1 setRequestHeaders:[LJControl requestHeaderDictionary]];
+    requestMessage1.tag = 101;
+    [requestMessage1 setDelegate:self];
+    [requestMessage1 setDidFailSelector:@selector(urlRequestFailed:)];
+    [requestMessage1 setDidFinishSelector:@selector(urlRequestSucceeded:)];
+    [requestMessage1 startAsynchronous];
+
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+
+    self.tdv.hidden = YES;
+
+    MyMessageModel *shjmsm = [dataArr objectAtIndex:indexPath.row];
+    
+    
+    NSString *ret= [_seletedDic valueForKey:[NSString stringWithFormat:@"%zd",indexPath.row]];
+    
+    NSString *a=[NSString stringWithFormat:@"%zd",!ret.boolValue];
+    [_seletedDic setObject:a forKey:[NSString stringWithFormat:@"%zd",indexPath.row]];
+    [tableView reloadData];
+    
+    if ([shjmsm.status isEqualToString:@"1"]) {//已读取就return
+        
+            return;
+    }
+    
+    
+    
+//    NSString *content=shjmsm.msm_content;
+//    NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:16]};
+//    CGRect requiredSize = [content boundingRectWithSize:CGSizeMake(ScreenFrame.size.width-20, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+//    
+//    if (requiredSize.size.height<=50) {
+//        return;
+//    }else{
+    
+    
+//
+////        [_seletedDic setObject:@"1" forKey:[NSString stringWithFormat:@"%zd",indexPath.row]];
+//        [tableView reloadData];
+//    }
+
+    
+
+    
+
+    
+ #if 1
+    
+    NSString *urlStr= [NSString stringWithFormat:@"%@%@",FIRST_URL,@"/app/buyer/buyer_message_receive.htm"];
+    
+    NSArray *fileContent2 = [MyUtil returnLocalUserFile];
+    
+    NSDictionary *par=@{@"user_id":[fileContent2 objectAtIndex:3],@"token":[fileContent2 objectAtIndex:1],@"id":shjmsm.ID};
+    __weak typeof(self) ws= self;
+    [[Requester managerWithHeader]POST:urlStr parameters:par success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *dic = responseObject;
+        NSLog(@"======%@",dic);
+        
+        NSString *ret=[NSString stringWithFormat:@"%@",responseObject[@"ret"]];
+        if ([ret isEqualToString:@"1"]) {
+            [SYObject failedPrompt:@"已读取"];
+        }else{
+            [SYObject failedPrompt:@"消息不存在"];
+
+        }
+        dispatch_queue_t mainQ = dispatch_get_main_queue();
+        dispatch_async(mainQ, ^{
+            [shjTableView reloadData];
+        });
+        
+#pragma mark ---这里先注释
+        [self headerRereshing];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+        [SYObject endLoading];
+        
+    }];
+
+  #endif
+}
+
+//重写返回按钮
+-(void)createBackBtn1{
+//    UIButton *button = [LJControl backBtn];
+//    [button addTarget:self action:@selector(backBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:button];
+//    self.navigationItem.leftBarButtonItem =bar;
+}
+#pragma mark -UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    if (self.navigationController.viewControllers.count == 1){
+        //关闭主界面的右滑返回
+        return NO;
+    }else{
+        
+        return YES;
+    }
+}
+#pragma mark - tableView delegate
+
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+//    if (indexPath.row == dataArr.count - 1 && dataArr.count != 0 && dataArr.count != self.lastCount) {
+//        [self footerRereshing];
+//        self.lastCount = dataArr.count;
+//    }
+//}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (dataArr.count != 0) {
+        NSLog(@"countcountcount==%zd",dataArr.count);
+        return dataArr.count;
+    }
+    return 0;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    UITableViewCell *cell = [shjTableView dequeueReusableCellWithIdentifier:
+//                             [NSString stringWithFormat:@"cell%zd",indexPath.row]];
+                             
+    MessageTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MessageTableViewCell"];
+    
+    if (cell == nil) {
+        cell = [[MessageTableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault
+                reuseIdentifier:@"MessageTableViewCell"];
+
+               
+
+    }
+//    if(dataArr.count != 0){
+    
+        MyMessageModel *shjmsm = [dataArr objectAtIndex:indexPath.row];
+    
+    NSLog(@"===%zd---%@=",indexPath.row,shjmsm.msm_content);
+    
+    
+    
+    
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:15.0f]};
+    CGRect requiredSize = [shjmsm.msm_content boundingRectWithSize:CGSizeMake(ScreenFrame.size.width-20, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+    
+    NSLog(@"===%zd   ===%f",indexPath.row,requiredSize.size.height);
+    int height;
+//    34.95 是2行的内容高度
+    if (requiredSize.size.height>34) {
+        NSInteger row=indexPath.row;
+        NSString *key=[NSString stringWithFormat:@"%zd",row];
+        NSString *ret=_seletedDic[key];
+        if ([ret isEqualToString:@"1"]) {
+            
+            NSLog(@"1111");
+            height=requiredSize.size.height+15;
+        }else{
+            height=50;
+            
+        }
+    }else{
+        height=25;
+        
+    }
+    //
+    
+
+    
+    cell.lblContent.frame = CGRectMake(20, 51, ScreenFrame.size.width-40, height);
+    
+    
+    cell.imgBG.frame =CGRectMake(10, 10, ScreenFrame.size.width-20, cell.frame.size.height-2);
+    
+    
+    
+    cell.statuLabel.frame= CGRectMake(ScreenFrame.size.width-85, CGRectGetMaxY(cell.lblContent.frame), 70, 20);
+    
+    CGRect rect = cell.frame;
+    rect.size.height = CGRectGetMaxY(cell.statuLabel.frame)+5;
+    cell.frame = rect;
+    cell.whiteView.frame=CGRectMake(10, 10, ScreenFrame.size.width-20, cell.frame.size.height);
+
+    
+
+        //来自哪里
+        cell.lblFromUser.text = [NSString stringWithFormat:@"%@",shjmsm.msm_fromUser];
+        //时间
+        cell.lbladdTime.text = [NSString stringWithFormat:@"%@",shjmsm.msm_addTime];
+        //内容
+        cell.lblContent.text = [NSString stringWithFormat:@"%@",shjmsm.msm_content];
+        
+    
+        if ([shjmsm.status isEqualToString:@"1"]) {
+            cell.statuLabel.text=@"已阅读";
+            cell.statuLabel.textColor=[UIColor lightGrayColor];
+            cell.lblContent.textColor=[UIColor lightGrayColor];
+            
+            
+        }else{
+            cell.lblContent.textColor=[UIColor blackColor];
+            
+            cell.statuLabel.textColor=[UIColor redColor];
+            cell.statuLabel.text=@"点击阅读";
+        }
+    
+        
+   
+
+//    }
+    return cell;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+//    
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath ];
+    return cell.frame.size.height+15;
+    
+//    return 150;
+
+//    
+//    MyMessageModel *shjmsm = [dataArr objectAtIndex:indexPath.row];
+//
+//    
+//    NSString *content=shjmsm.msm_content;
+//    NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:16]};
+//    CGRect requiredSize = [content boundingRectWithSize:CGSizeMake(ScreenFrame.size.width-20, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+//    int height;
+//    if (requiredSize.size.height>50) {
+//        NSInteger row=indexPath.row;
+//        NSString *key=[NSString stringWithFormat:@"%zd",row];
+//        NSString *ret=_seletedDic[key];
+//        if ([ret isEqualToString:@"1"]) {
+//            
+//            NSLog(@"1111");
+//            height=requiredSize.size.height;
+//        }else{
+//            height=50;
+//            
+//        }
+//    }else{
+//        height=25;
+//        
+//    }
+//    return  51+requiredSize.size.height+30;
+
+    
+
+}
+
+#pragma mark - 返回按钮
+-(void)createBackBtn{
+    UIButton *buttonChat = [UIButton buttonWithType:UIButtonTypeCustom ];
+    buttonChat.frame =CGRectMake(0, 0, 24, 24);
+    [buttonChat setBackgroundImage:[UIImage imageNamed:@"roundPoint"] forState:UIControlStateNormal];
+    [buttonChat addTarget:self action:@selector(More) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *bar2 = [[UIBarButtonItem alloc]initWithCustomView:buttonChat];
+    self.navigationItem.rightBarButtonItem =bar2;
+}
+
+
+-(void)viewDidLayoutSubviews{
+    [self createMoreBtn];
+}
+-(void)createMoreBtn{
+    ThreeDotView *tdv = [[ThreeDotView alloc]initWithButtonCount:1 nc:self.navigationController];
+    self.tdv = tdv;
+    tdv.vc = self;
+    [tdv insertMoreBtn:[tdv homeBtn]];
+    tdv.hidden = YES;
+}
+-(void)More{
+    self.tdv.hidden = NO;
+    self.tdv.tri.hidden=NO;
+}
+-(void)backBtnClicked{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - 上拉刷新
+-(void)footerRereshing{
+    NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsPath = [docPath objectAtIndex:0];
+    NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+    NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,MESSAGE_URL]];
+    requestMessage2 = [ASIFormDataRequest requestWithURL:url];
+    [requestMessage2 setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+    [requestMessage2 setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+    
+    [requestMessage2 setPostValue:[NSString stringWithFormat:@"%lu",(unsigned long)dataArr.count] forKey:@"beginCount"];
+    [requestMessage2 setPostValue:@"20" forKey:@"selectCount"];
+    
+    [requestMessage2 setRequestHeaders:[LJControl requestHeaderDictionary]];
+    requestMessage2.tag = 102;
+    [requestMessage2 setDelegate:self];
+    [requestMessage2 setDidFailSelector:@selector(my1_urlRequestFailed:)];
+    [requestMessage2 setDidFinishSelector:@selector(my1_urlRequestSucceeded:)];
+    [requestMessage2 startAsynchronous];
+    
+}
+#pragma mark -网络
+-(void)my1_urlRequestSucceeded:(ASIFormDataRequest *)request{
+    int statuscode3 = [request responseStatusCode];
+    if (statuscode3 == 200) {
+        NSDictionary *dicBig = [NSJSONSerialization JSONObjectWithData:request.responseData options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"dicBig:%@",dicBig);
+        NSArray *array = [dicBig objectForKey:@"msg_list"];
+        
+        NSLog(@"array.count==%zd",array.count);
+        if (dataArrShangla.count!=0) {
+            [dataArrShangla removeAllObjects];
+        }
+        for (NSDictionary *dic in array) {
+            MyMessageModel *shjmsm = [[MyMessageModel alloc]init];
+            shjmsm.msm_fromUser = [dic objectForKey:@"fromUser"];
+            shjmsm.msm_addTime = [dic objectForKey:@"addTime"];
+            shjmsm.msm_content = [dic objectForKey:@"content"];
+            
+            shjmsm.status =[NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+            shjmsm.ID =[NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+
+//            arr2 = [dic objectForKey:@"msg_list"];
+            [dataArrShangla addObject:shjmsm];
+        }
+    }
+    [dataArr addObjectsFromArray:dataArrShangla];
+//    requestBool = YES;
+    dispatch_queue_t mainQ = dispatch_get_main_queue();
+    dispatch_async(mainQ, ^{
+        [shjTableView reloadData];
+    });
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+//        [shjTableView reloadData];
+    
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+//        [shjTableView footerEndRefreshing];
+//    });
+}
+-(void)my1_urlRequestFailed:(ASIFormDataRequest *)request{
+    [SYObject endLoading];
+}
+-(void)urlRequestSucceeded:(ASIFormDataRequest *)request{
+    promptView.hidden=NO;
+    int statuscode3 = [request responseStatusCode];
+    if (statuscode3 == 200) {
+        [SYObject endLoading];
+        NSDictionary *dicBig = [NSJSONSerialization JSONObjectWithData:request.responseData options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"我的消息:%@",dicBig);
+        NSArray *array = [dicBig objectForKey:@"msg_list"];
+        
+        NSLog(@"ocun===%zd",array.count);
+        if (dataArr.count!=0)
+        {
+            [dataArr removeAllObjects];
+        }
+        if (dicBig) {
+            if ([[dicBig objectForKey:@"ret"] isEqualToString:@"false"]) {
+            }else{
+                for (NSDictionary *dic in array) {
+                    MyMessageModel *shjmsm = [[MyMessageModel alloc]init];
+                    shjmsm.msm_fromUser = [dic objectForKey:@"fromUser"];
+                    shjmsm.msm_addTime = [dic objectForKey:@"addTime"];
+                    shjmsm.msm_content = [dic objectForKey:@"content"];
+                    NSLog(@"content==%@",shjmsm.msm_content);
+                    
+                    shjmsm.status =[NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+                    shjmsm.ID =[NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+
+//                    arr2 = [dic objectForKey:@"msg_list"];
+                    [dataArr addObject:shjmsm];
+                }
+            }
+        }
+    }
+    if (dataArr.count==0) {
+        shjTableView.hidden = YES;
+        promptView.hidden=NO;
+        
+    }else{
+        shjTableView.hidden = NO;
+        promptView.hidden=YES;
+    }
+    [shjTableView reloadData];
+    [shjTableView headerEndRefreshing];
+    
+}
+-(void)urlRequestFailed:(ASIFormDataRequest *)request{
+    [SYObject endLoading];
+}
+
+@end

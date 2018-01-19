@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>8B72B050-93EB-45F7-9239-3563FC96626D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>My_App</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>b6ff5aa8-850a-0f49-bb22-3ecbba4579f5</key>
+		<string>https://192.168.1.254/svn/iskyshop_b2b2c_2015_ios</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>2015_b2b2c/My_App.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>b6ff5aa8-850a-0f49-bb22-3ecbba4579f5</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>b6ff5aa8-850a-0f49-bb22-3ecbba4579f5</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>b6ff5aa8-850a-0f49-bb22-3ecbba4579f5</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ios-code</string>
+		</dict>
+	</array>
+</dict>
+</plist>

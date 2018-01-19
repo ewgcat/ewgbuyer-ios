@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "bcbef1de-004a-544e-9de8-5d885e18062f++7205",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "bcbef1de-004a-544e-9de8-5d885e18062f++7205" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "bcbef1de-004a-544e-9de8-5d885e18062f++7205" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "65B44CFA-9D45-457A-89AC-CBAAFE2D6266",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "bcbef1de-004a-544e-9de8-5d885e18062f++7205" : "%E5%95%86%E5%AE%B6%E7%AB%AF\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "2016seller_01_09_new",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "2016seller_01_09_new.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/192.168.1.254\/svn\/iskyshop_b2b2c_2016_seller_ios",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "bcbef1de-004a-544e-9de8-5d885e18062f++7205"
+    }
+  ]
+}

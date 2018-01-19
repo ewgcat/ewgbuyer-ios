@@ -1,0 +1,185 @@
+//
+//  CustomActionSheet.m
+//  customActionSheetTest
+//
+//  Created by .
+//  Copyright (c) . All rights reserved.
+//
+
+#import "CustomActionSheet.h"
+#import "AppDelegate.h"
+#define intervalWithButtonsX 50
+#define intervalWithButtonsY 15
+#define buttonCountPerRow 3
+#define headerHeight 30
+#define bottomHeight 30
+#define cancelButtonHeight 40 
+@implementation CustomActionSheet
+@synthesize buttons;
+@synthesize backgroundImageView;
+@synthesize delegate;
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code
+    }
+    return self;
+}
+
+- (id)initWithButtons:(NSArray *)buttonArray
+{
+    self = [super init];
+    self.buttons = buttonArray;
+    if (self) {
+        // Initialization code
+        coverView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        coverView.backgroundColor = [UIColor colorWithRed:51.0f/255 green:51.0f/255 blue:51.0f/255 alpha:0.6f];
+        coverView.hidden = YES;
+        self.backgroundImageView.alpha = 0.7f;
+        [self addSubview:self.backgroundImageView];
+        for (int i = 0; i < [self.buttons count]; i++) {
+            CustomActionSheetButton * button = [self.buttons objectAtIndex:i];
+            button.imgButton.tag = i;
+            [button.imgButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview: button];
+        }
+        cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelButton addTarget:self action:@selector(dissmiss) forControlEvents:UIControlEventTouchUpInside];
+        cancelButtonlabel=[LJControl labelFrame:cancelButton.bounds setText:@"取消" setTitleFont:17 setbackgroundColor:[UIColor whiteColor] setTextColor:[UIColor blackColor] textAlignment:NSTextAlignmentCenter];
+        [cancelButton addSubview:cancelButtonlabel];
+        [self addSubview:cancelButton];
+        cancelButton.backgroundColor=[UIColor clearColor];
+        self.backgroundColor = [UIColor whiteColor];
+    }
+    return self;
+}
+
+
+-(void)dealloc
+{
+    self.buttons = nil;
+    self.backgroundImageView = nil;
+    [super dealloc];
+}
+
+-(void)setPositionInView:(UIView *)view
+{
+    if([self.buttons count] == 0)
+    {
+        return;
+    }
+    float buttonWidth = ((CustomActionSheetButton *)[self.buttons objectAtIndex:0]).frame.size.width;
+    float buttonHeight = ((CustomActionSheetButton *)[self.buttons objectAtIndex:0]).frame.size.height;
+    self.frame = CGRectMake(0.0f, view.frame.size.height, view.frame.size.width, cancelButtonHeight + bottomHeight + headerHeight + (buttonHeight + intervalWithButtonsY)*(([self.buttons count]-1)/buttonCountPerRow + 1));
+    self.backgroundImageView.frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, self.frame.size.height);
+    
+    float beginX =(self.frame.size.width - buttonWidth*buttonCountPerRow)/(buttonCountPerRow + 1);
+    
+    cancelButton.frame = CGRectMake(beginX,
+                                    (intervalWithButtonsY + buttonHeight) * (([self.buttons count]-1)/buttonCountPerRow + 1) + headerHeight+20,
+                                    self.frame.size.width - beginX * 2, cancelButtonHeight);
+    cancelButtonlabel.frame = CGRectMake(0,0,self.frame.size.width - beginX * 2, cancelButtonHeight);
+    
+    if ([self.buttons count] > buttonCountPerRow) {
+        for (int i = 0; i < [self.buttons count]; i++) {
+            CustomActionSheetButton * button = [self.buttons objectAtIndex:i];
+            button.frame = CGRectMake(beginX + i%buttonCountPerRow*(buttonWidth + beginX),
+                                      headerHeight + i/buttonCountPerRow*(buttonHeight + intervalWithButtonsY), buttonWidth, buttonHeight);
+        }
+    }else{
+        for (int i = 0; i < [self.buttons count]; i++) {
+            CustomActionSheetButton * button = [self.buttons objectAtIndex:i];
+            button.frame = CGRectMake(beginX + i%buttonCountPerRow*(buttonWidth + beginX),
+                                      headerHeight + i/buttonCountPerRow*(buttonHeight + intervalWithButtonsY), buttonWidth, buttonHeight);
+        }
+    }
+}
+
+
+-(void)showInView:(UIView *)view
+{
+    [self setPositionInView:view];
+    [view addSubview:coverView];
+    [view addSubview:self];
+    [UIView beginAnimations:@"ShowCustomActionSheet" context:nil];
+    self.frame = CGRectMake(0.0f, self.frame.origin.y - self.frame.size.height, self.frame.size.width, self.frame.size.height);
+    coverView.hidden = NO;
+    [UIView commitAnimations];
+}
+-(void)dissmiss
+{
+    [UIView beginAnimations:@"DismissCustomActionSheet" context:nil];
+    self.frame = CGRectMake(0.0f, self.frame.origin.y + self.frame.size.height, self.frame.size.width, self.frame.size.height);
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(sheetDidDismissed)];
+    coverView.hidden = YES;
+    [UIView commitAnimations];
+}
+
+-(void)sheetDidDismissed
+{
+    [coverView removeFromSuperview];
+    [self removeFromSuperview];
+}
+
+-(void)buttonAction:(UIButton *)button
+{
+    NSLog(@"index:%ld",(long)button.tag);
+    if([delegate respondsToSelector:@selector(choseAtIndex:)])
+    {
+        [delegate choseAtIndex:(int)button.tag];
+    }
+    [self dissmiss];
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect
+{
+    // Drawing code
+}
+*/
+
+@end
+
+
+@implementation CustomActionSheetButton
+@synthesize imgButton;
+@synthesize titleLabel;
+-(id)init
+{
+    if(self)
+    {
+        [self release];
+        self = nil;
+    }
+    self = [[[[NSBundle mainBundle] loadNibNamed:@"CustomActionSheetButton" owner:self options:nil] objectAtIndex:0] retain];
+    for (id obj in self.subviews) {
+        if([obj isKindOfClass:[UIButton class]])
+        {
+            self.imgButton = obj;
+        }
+        else if([obj isKindOfClass:[UILabel class]])
+        {
+            self.titleLabel = obj;
+        }
+    }
+    return self;
+}
+
++(CustomActionSheetButton *)buttonWithImage:(UIImage *)image title:(NSString *)title
+{
+    CustomActionSheetButton * button = [[[CustomActionSheetButton alloc] init] autorelease];
+    [button.imgButton setBackgroundImage:image forState:UIControlStateNormal];
+    button.titleLabel.text = title;
+    return button;
+}
+
+-(void)dealloc
+{
+    self.titleLabel = nil;
+    self.imgButton = nil;
+    [super dealloc];
+}
+@end

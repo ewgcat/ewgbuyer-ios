@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="OneYuanDetailListCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="about.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rz1-bW-eS2">
+                        <rect key="frame" x="14" y="10" width="40" height="40"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="4WR-RQ-7qx"/>
+                            <constraint firstAttribute="height" constant="40" id="s2s-n9-8Ck"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="一次不中懒得再玩了" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIm-Cq-EPy">
+                        <rect key="frame" x="62" y="10" width="119" height="20"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="DiM-Of-dZi"/>
+                            <constraint firstAttribute="width" constant="119" id="gJp-bK-YPZ"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="参与了10人次 2016-02-17 11:20:17.491" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L1j-yZ-any">
+                        <rect key="frame" x="62" y="30" width="218" height="21"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="218" id="HlL-wC-b79"/>
+                            <constraint firstAttribute="height" constant="21" id="Z2w-pi-v2e"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstItem="L1j-yZ-any" firstAttribute="leading" secondItem="Rz1-bW-eS2" secondAttribute="trailing" constant="8" id="34p-ep-rGe"/>
+                    <constraint firstItem="Rz1-bW-eS2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="6" id="YTK-J9-tfs"/>
+                    <constraint firstItem="dIm-Cq-EPy" firstAttribute="leading" secondItem="Rz1-bW-eS2" secondAttribute="trailing" constant="8" id="rPP-xo-rBD"/>
+                    <constraint firstItem="L1j-yZ-any" firstAttribute="top" secondItem="dIm-Cq-EPy" secondAttribute="bottom" id="rlc-au-o6l"/>
+                    <constraint firstItem="dIm-Cq-EPy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="xiS-6h-ydJ"/>
+                    <constraint firstItem="Rz1-bW-eS2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="xnL-OF-lTX"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="content" destination="L1j-yZ-any" id="otY-eK-ukS"/>
+                <outlet property="img" destination="Rz1-bW-eS2" id="2JI-75-crx"/>
+                <outlet property="userName" destination="dIm-Cq-EPy" id="H2i-7r-r7u"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="about.png" width="50" height="50"/>
+    </resources>
+</document>

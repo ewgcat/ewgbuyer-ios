@@ -1,0 +1,513 @@
+//
+//  AddAdminViewController.m
+//  My_App
+//
+//  Created by apple on 14-8-13.
+//  Copyright (c) 2014年 apple. All rights reserved.
+//
+
+#import "AddAdminViewController.h"
+#import "SHJAddManageViewController.h"
+#import "addressManagerCell.h"
+#import "ThirdViewController.h"
+#import "AddAddressTableViewController.h"
+
+@interface AddAdminViewController ()<AddressManagerCellDelegate,UIGestureRecognizerDelegate>
+
+@property (nonatomic,weak)addressManagerCell *currentCell;
+
+@end
+
+@implementation AddAdminViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+        self.title = @"收货地址";
+    }
+    return self;
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+    [requestAdmin1 clearDelegatesAndCancel];
+    [requestAdmin3 clearDelegatesAndCancel];
+    [requestSetMo clearDelegatesAndCancel];
+    
+
+    [requestAdd clearDelegatesAndCancel];
+    [requestAdmin5 clearDelegatesAndCancel];
+    morenid = @"";
+    [MyTableView setEditing:NO];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    self.tabBarController.tabBar.hidden = YES;
+    [super viewWillAppear:YES];
+    [self getListData];
+}
+-(void)getListData{
+    NSString *urlStr=[NSString stringWithFormat:@"%@%@",FIRST_URL,ADDLIST_URL];
+    NSDictionary *par=@{@"user_id":[SYObject currentUserID],@"token":[SYObject currentToken]};
+    __weak typeof(self)ws=self;
+    [[Requester managerWithHeader]POST:urlStr parameters:par success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [ws urlRequestSucceeded:responseObject];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+        NSLog(@"\n\n***错误信息:***\n*类名:%@*\n*方法名:%s*\n*行数:%d*\n\n",NSStringFromClass([self class]),__func__,__LINE__);
+        [ws urlRequestFailed];
+    }];
+    
+}
+#pragma mark -UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    if (self.navigationController.viewControllers.count == 1){  //关闭主界面的右滑返回
+        return NO;
+    }else{
+        
+        return YES;
+    }
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]>= 7.0) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+    [self createBackBtn];
+    [self createTableView];
+    
+    select = 0;
+    
+    dataArray = [[NSMutableArray alloc]init];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom ];
+    button.frame =CGRectMake(0, 0, 40, 40);
+    [button setTitle:@"新建" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(New) forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.font  = [UIFont systemFontOfSize:17];
+    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem =bar;
+    [self getListData];
+
+}
+-(void)createBackBtn{
+//    UIButton *button = [LJControl backBtn];
+//    [button addTarget:self action:@selector(backBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:button];
+//    self.navigationItem.leftBarButtonItem =bar;
+}
+-(void)createTableView{
+    if (UIDeviceHao>=7.0) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }else{
+    }
+    UITableViewStyle style = UITableViewStylePlain;
+    CGFloat ty = ScreenFrame.origin.y;
+    if (ScreenFrame.size.height>480) {//说明是5 5s
+        MyTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, ty, ScreenFrame.size.width, ScreenFrame.size.height-64) style:style];
+    }else{
+        MyTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, ty, ScreenFrame.size.width, ScreenFrame.size.height-64) style:style];
+    }
+    MyTableView.backgroundColor = [UIColor colorWithRed:238/255.0f green:238/255.0f blue:238/255.0f alpha:1];
+    MyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    MyTableView.delegate = self;
+    MyTableView.dataSource=  self;
+    MyTableView.hidden = YES;
+    MyTableView.showsVerticalScrollIndicator=NO;
+    MyTableView.showsHorizontalScrollIndicator = NO;
+    MyTableView.estimatedRowHeight=140;
+    MyTableView.rowHeight=UITableViewAutomaticDimension;
+    [self.view addSubview:MyTableView];
+    UISwipeGestureRecognizer *rightSwipeGestureRecognizerSMytableview = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(backBtnClicked)];
+    rightSwipeGestureRecognizerSMytableview.direction = UISwipeGestureRecognizerDirectionRight;
+    [MyTableView addGestureRecognizer:rightSwipeGestureRecognizerSMytableview];
+}
+#pragma mark - 滚动代理
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self.currentCell swipedRight:nil];
+}
+#pragma mark - tabelView数据源方法
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (dataArray.count!=0) {
+        return dataArray.count;
+    }
+    return 0;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewAutomaticDimension;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    addressManagerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addressManagerCell"];
+    if(cell == nil){
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"addressManagerCell" owner:self options:nil] lastObject];
+    }
+    if (dataArray.count != 0) {
+        ClassifyModel * cccc = [dataArray objectAtIndex:indexPath.row];
+        [cell setData:cccc];
+        if (select == 0) {
+            if ([[NSString stringWithFormat:@"%@",cccc.manager_addr_id] isEqualToString: [NSString stringWithFormat:@"%@",morenid]]) {
+                [cell.boderImage setImage:[UIImage imageNamed:@"lj_h.png"]];
+                [cell setDefault:YES];
+            }
+            else{
+                [cell.boderImage setImage:[UIImage imageNamed:@""]];
+                [cell setDefault:NO];
+                
+            }
+            ThirdViewController *third = [ThirdViewController sharedUserDefault];
+            if ([[NSString stringWithFormat:@"%@",cccc.manager_addr_id] isEqualToString:third.person_addr_id]) {
+                [cell.boderImage setImage:[UIImage imageNamed:@"lj_h.png"]];
+            }
+        }else{
+            if (indexPath.row == select-100) {
+                [cell.boderImage setImage:[UIImage imageNamed:@"lj_h.png"]];
+                [cell setDefault:YES];
+            }else{
+                [cell.boderImage setImage:[UIImage imageNamed:@""]];
+                [cell setDefault:NO];
+            }
+        }
+    }
+    cell.editBtn.tag = indexPath.row +300;
+    [cell.editBtn addTarget:self action:@selector(writeMessage:) forControlEvents:UIControlEventTouchUpInside];
+    cell.delegate = self;
+    cell.indexPath = indexPath;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
+}
+#pragma mark - 设置默认按钮被点击代理
+-(void)addressManagerCellSetDefaultBtnClicked:(addressManagerCell *)cell{
+    //需要修改图片
+    NSIndexPath *indexPath = cell.indexPath;
+    didselect = indexPath.row+100;
+    ClassifyModel *cla = [dataArray objectAtIndex:indexPath.row];
+    [SYObject startLoading];
+    //发起设置成默认的请求
+    NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsPath = [docPath objectAtIndex:0];
+    NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+    NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,DEFAULTADDRESS_URL]];
+    requestSetMo = [ASIFormDataRequest requestWithURL:url];
+    [requestSetMo setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+    [requestSetMo setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+    [requestSetMo setPostValue:cla.manager_addr_id forKey:@"addr_id"];
+    
+    [requestSetMo setRequestHeaders:[LJControl requestHeaderDictionary]];
+    requestSetMo.tag = 102;
+    [requestSetMo setDelegate: self];
+    [requestSetMo setDidFailSelector:@selector(my1_urlRequestFailed:)];
+    [requestSetMo setDidFinishSelector:@selector(my1_urlRequestSucceeded:)];
+    [requestSetMo startAsynchronous];
+    
+    ThirdViewController *th = [ThirdViewController sharedUserDefault];
+    th.person_address = [NSString stringWithFormat:@"%@%@",cla.manager_area,cla.manager_areaInfo];
+    th.person_name = cla.manager_trueName;
+    th.person_phone = cla.manager_telephone;
+    th.person_addr_id = cla.manager_addr_id;
+    
+    [MyTableView reloadData];
+    [self failedPrompt:@"设置成功!"];
+
+}
+#pragma mark - 删除按钮被点击
+-(void)addressManagerCellDeleteBtnClicked:(addressManagerCell *)cell{
+    if (UIDeviceHao >= 8.0) {
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"确认删除" message:@"真的要删除这个地址吗?(这个动作不可以恢复)" preferredStyle:UIAlertControllerStyleActionSheet];
+        //确定删除
+        UIAlertAction *aa1 = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            NSIndexPath *indexPath = cell.indexPath;
+            // Delete the row from the data source.
+            [SYObject startLoading];
+            //发起删除请求 后在发起刷新页面请求
+            ClassifyModel *cla = [dataArray objectAtIndex:indexPath.row];
+            NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+            NSString *documentsPath = [docPath objectAtIndex:0];
+            NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+            NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+            
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,ADDDELETE_URL]];
+            requestAdmin3 = [ASIFormDataRequest requestWithURL:url];
+            [requestAdmin3 setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+            [requestAdmin3 setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+            [requestAdmin3 setPostValue:cla.manager_addr_id forKey:@"addr_id"];
+            
+            [requestAdmin3 setRequestHeaders:[LJControl requestHeaderDictionary]];
+            requestAdmin3.tag = 103;
+            [requestAdmin3 setDelegate: self];
+            [requestAdmin3 setDidFailSelector:@selector(my3_urlRequestFailed:)];
+            [requestAdmin3 setDidFinishSelector:@selector(my3_urlRequestSucceeded:)];
+            [requestAdmin3 startAsynchronous];
+        }];
+        //点错了
+        UIAlertAction *aa2 = [UIAlertAction actionWithTitle:@"点错了" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            ;
+        }];
+        [ac addAction:aa1];
+        [ac addAction:aa2];
+        [self presentViewController:ac animated:YES completion:nil];
+    }
+}
+#pragma mark - 滑动代理
+-(void)addressManagerCellDidRecognizedLeftGesture:(addressManagerCell *)cell{
+    if(self.currentCell != cell){
+        [self.currentCell swipedRight:nil];
+        self.currentCell = cell;
+    }
+}
+#pragma mark - tableView代理方法
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        // Delete the row from the data source.
+        [SYObject startLoading];
+        
+        //发起删除请求 后在发起刷新页面请求
+        ClassifyModel *cla = [dataArray objectAtIndex:indexPath.row];
+        NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+        NSString *documentsPath = [docPath objectAtIndex:0];
+        NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+        NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+        
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,ADDDELETE_URL]];
+        requestAdmin3 = [ASIFormDataRequest requestWithURL:url];
+        [requestAdmin3 setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+        [requestAdmin3 setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+        [requestAdmin3 setPostValue:cla.manager_addr_id forKey:@"addr_id"];
+        
+        [requestAdmin3 setRequestHeaders:[LJControl requestHeaderDictionary]];
+        requestAdmin3.tag = 103;
+        [requestAdmin3 setDelegate: self];
+        [requestAdmin3 setDidFailSelector:@selector(my3_urlRequestFailed:)];
+        [requestAdmin3 setDidFinishSelector:@selector(my3_urlRequestSucceeded:)];
+        [requestAdmin3 startAsynchronous];
+    }
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    }
+}
+#pragma mark - 新建地址
+-(void)New
+{
+    AddAddressTableViewController *sy = [[UIStoryboard storyboardWithName:@"SYAddressStoryBoard" bundle:nil]instantiateViewControllerWithIdentifier:@"addAddressVC"];
+    sy.editType = SY_ADDRESS_POST_TYPE_ADD;
+    
+    if (_state==0) {
+        sy.validateType=NO_NEED_VALIDATE;
+
+    }else{
+        sy.validateType=NEED_VALIDATE;
+
+    
+    }
+    [self.navigationController pushViewController:sy animated:YES];
+}
+#pragma mark - 编辑地址
+-(void)writeMessage:(UIButton *)btn{
+    //点击后要跳转进入新建页面 将数据填充到里面 然后进行修改
+    AddAddressTableViewController *sy = [[UIStoryboard storyboardWithName:@"SYAddressStoryBoard" bundle:nil]instantiateViewControllerWithIdentifier:@"addAddressVC"];
+    sy.editType = SY_ADDRESS_POST_TYPE_EDIT;
+
+    sy.validateType=NO_NEED_VALIDATE;
+  
+    ClassifyModel *class = [dataArray objectAtIndex:btn.tag -300];
+    
+
+    NSString *photoNum=nil;
+    if (class.manager_telephone.length>0) {
+        photoNum=class.manager_telephone;
+        NSLog(@"photoNu1m==%@",photoNum);
+
+    }else if(class.manager_mobile.length>0){
+        photoNum=class.manager_mobile;
+        NSLog(@"photoNu2m==%@",photoNum);
+
+    }else{
+        photoNum=@"";
+        NSLog(@"photoNu3m==%@",photoNum);
+
+    }
+    if (class.card) {//如果有身份证
+         sy.infoArrayWhenEditing = @[class.manager_addr_id,class.manager_area,class.manager_areaInfo,photoNum,class.manager_trueName,class.card];
+    }else{
+     sy.infoArrayWhenEditing = @[class.manager_addr_id,class.manager_area,class.manager_areaInfo,photoNum,class.manager_trueName,class.manager_zip,@""];
+    }
+    
+   
+    [self.navigationController pushViewController:sy animated:YES];
+}
+-(void)backBtnClicked{
+    if (_cloudCartModel) {
+        [self.delegate addAdminViewControllerBackClick:_cloudCartModel];
+        
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+-(void)failedPrompt:(NSString *)prompt{
+    [SYObject endLoading];
+    [SYObject failedPrompt:prompt];
+}
+#pragma mark -网络
+-(void)my1_urlRequestSucceeded:(ASIFormDataRequest *)request{
+    
+    int statuscode2 = [request responseStatusCode];
+    if (statuscode2 == 200) {
+        [SYObject endLoading];
+        NSDictionary *dicBig = [NSJSONSerialization JSONObjectWithData:request.responseData options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"dic33Big:%@",dicBig);
+        if ([[dicBig objectForKey:VERIFY] intValue]==1) {
+            
+            select = didselect;
+            [self failedPrompt:@"已成功设置为默认地址"];
+            
+            
+        }else{
+            [self failedPrompt:@"设置为默认地址失败"];
+        }
+    }
+    [MyTableView reloadData];
+    
+}
+-(void)my1_urlRequestFailed:(ASIFormDataRequest *)request{
+    [self failedPrompt:@"网络请求失败"];
+}
+-(void)urlRequestSucceeded:(NSDictionary *)dic{
+//    int statuscode2 = [request responseStatusCode];
+//    if (statuscode2 == 200) {
+        [SYObject endLoading];
+    NSDictionary *dicBig = dic;
+        if (dataArray.count!=0) {
+            [dataArray removeAllObjects];
+        }
+        NSLog(@"dicBig1121:%@",dicBig);
+        NSArray *arr = [dicBig objectForKey:@"address_list"];
+        for(NSDictionary *dic in arr ){
+            ClassifyModel *classi = [[ClassifyModel alloc]init];
+            classi.manager_zip = [dic objectForKey:@"zip"];
+            classi.manager_areaInfo = [dic objectForKey:@"areaInfo"];
+            classi.manager_area = [dic objectForKey:@"area"];
+            classi.manager_addr_id = [dic objectForKey:@"addr_id"];
+            classi.manager_trueName = [dic objectForKey:@"trueName"];
+            if ( [dic objectForKey:@"card"]) {
+                classi.card = [dic objectForKey:@"card"];
+
+            }
+
+            NSString *ss = [dic objectForKey:@"telephone"];
+            if (ss.length == 0) {
+                classi.manager_telephone = @"";
+            }else{
+                classi.manager_telephone = [dic objectForKey:@"telephone"];
+            }
+            NSString *ss2 = [dic objectForKey:@"mobile"];
+            if (ss2.length == 0) {
+                classi.manager_mobile = @"";
+            }else{
+                classi.manager_mobile = [dic objectForKey:@"mobile"];
+            }
+            
+            [dataArray addObject:classi];
+        }
+        
+        NSArray *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+        NSString *documentsPath = [docPath objectAtIndex:0];
+        NSString *readPath2 = [documentsPath stringByAppendingPathComponent:@"information.txt"];
+        NSArray *fileContent2 = [[NSArray alloc] initWithContentsOfFile:readPath2];
+        
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,DEFAULTADDRESSFIND_URL]];
+        requestAdmin5 = [ASIFormDataRequest requestWithURL:url];
+        [requestAdmin5 setPostValue:[fileContent2 objectAtIndex:3] forKey:@"user_id"];
+        [requestAdmin5 setPostValue:[fileContent2 objectAtIndex:1] forKey:@"token"];
+        
+        [requestAdmin5 setRequestHeaders:[LJControl requestHeaderDictionary]];
+        requestAdmin5.tag = 105;
+        [requestAdmin5 setDelegate: self];
+        [requestAdmin5 setDidFailSelector:@selector(my2_urlRequestFailed:)];
+        [requestAdmin5 setDidFinishSelector:@selector(my2_urlRequestSucceeded:)];
+        [requestAdmin5 startAsynchronous];
+        MyTableView.hidden = NO;
+        if (dataArray.count ==0) {
+            MyTableView.hidden = YES;
+            promptView.hidden = NO;
+        }else {
+            MyTableView.hidden = NO;
+            promptView.hidden = YES;
+        }
+        [MyTableView reloadData];
+//    }
+    [SYObject endLoading];
+}
+-(void)my2_urlRequestSucceeded:(ASIFormDataRequest *)request{
+    int statuscode2 = [request responseStatusCode];
+    if (statuscode2 == 200) {
+        [SYObject endLoading];
+        NSDictionary *dicBig = [NSJSONSerialization JSONObjectWithData:request.responseData options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"dicBig1111:%@",dicBig);
+        morenid = [dicBig objectForKey:@"addr_id"];
+    }
+    [MyTableView reloadData];
+    [SYObject endLoading];
+}
+-(void)my2_urlRequestFailed:(ASIFormDataRequest *)request{
+    [self failedPrompt:@"网络请求失败"];
+}
+-(void)urlRequestFailed{
+    [self failedPrompt:@"网络请求失败"];
+}
+-(void)urlRequestFailed:(ASIFormDataRequest *)request{
+    [self failedPrompt:@"网络请求失败"];
+}
+-(void)my3_urlRequestSucceeded:(ASIFormDataRequest *)request{
+    int statuscode2 = [request responseStatusCode];
+    if (statuscode2 == 200) {
+        NSDictionary *dicBig = [NSJSONSerialization JSONObjectWithData:request.responseData options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"dicBig12:%@",dicBig);
+        if ([[dicBig objectForKey:VERIFY] intValue]==1) {
+            [self failedPrompt:@"已成功删除地址"];
+            
+            [self getListData];
+            
+        }
+    }
+    [SYObject endLoading];
+}
+-(void)my3_urlRequestFailed:(ASIFormDataRequest *)request{
+    [self failedPrompt:@"网络请求失败"];
+}
+//实现时候将label移除
+
+-(UIView *)loadingView:(CGRect)rect
+{
+    UIView *loadV=[[UIView alloc]initWithFrame:rect];
+    loadV.backgroundColor=[UIColor blackColor];
+    loadV.alpha = 0.8;
+    UIActivityIndicatorView *activityIndicatorV=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicatorV.center=CGPointMake(rect.size.width/2, rect.size.height/2-10);
+    [activityIndicatorV startAnimating];
+    
+    [loadV addSubview:activityIndicatorV];
+    UILabel *la=[[UILabel alloc]initWithFrame:CGRectMake(0, 70, 100, 30)];
+    la.text=@"正在加载...";
+    la.backgroundColor=[UIColor clearColor];
+    la.textAlignment=NSTextAlignmentCenter;
+    la.textColor=[UIColor whiteColor];
+    la.font=[UIFont boldSystemFontOfSize:15];
+    [loadV addSubview:la];
+    loadV.layer.cornerRadius=4;
+    loadV.layer.masksToBounds=YES;
+    return loadV;
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end

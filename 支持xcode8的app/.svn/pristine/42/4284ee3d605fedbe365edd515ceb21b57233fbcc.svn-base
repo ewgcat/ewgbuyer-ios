@@ -1,0 +1,605 @@
+//
+//  FouthViewController.m
+//  My_App
+//
+//  Created by apple on 15/7/7.
+//  Copyright (c) 2015年 apple. All rights reserved.
+//
+
+#import "FouthViewController.h"
+#import "NilCell.h"
+#import "ASIFormDataRequest.h"
+#import "BrandModel.h"
+#import "BrandGoodListViewController.h"
+#import "SecondViewController.h"
+#import "DemoSectionItemSubclass.h"
+#import <QuartzCore/QuartzCore.h>
+#import "Reachability.h"
+
+#define kSectionSelectorWidth 45
+
+@interface FouthViewController ()
+
+@end
+
+static FouthViewController *singleInstance=nil;
+
+@implementation FouthViewController
+
+@synthesize arr ,MyTableView;
+
+
+//+(id)sharedUserDefault
+//{
+//    if(singleInstance==nil)
+//    {
+//        @synchronized(self)
+//        {
+//            if(singleInstance==nil)
+//            {
+//                singleInstance=[[[self class] alloc] init];
+//            }
+//        }
+//    }
+//    return singleInstance;
+//}
+//
+//+ (id)allocWithZone:(NSZone *)zone;
+//{
+//    
+//    if(singleInstance==nil)
+//    {
+//        singleInstance=[super allocWithZone:zone];
+//    }
+//    return singleInstance;
+//}
+//-(id)copyWithZone:(NSZone *)zone
+//{
+//    return singleInstance;
+//}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+        self.title = @"品牌";
+        if (UIDeviceHao>=7.0) {
+            self.automaticallyAdjustsScrollViewInsets = NO;
+        }else{
+        }
+    }
+    return self;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+    [request_3 clearDelegatesAndCancel ];
+    [request_2 clearDelegatesAndCancel ];
+    [request_1 clearDelegatesAndCancel ];
+}
+-(void)netExist{
+    NetworkStatus networkStatus = [Reachability reachabilityForInternetConnection].currentReachabilityStatus;
+    if (networkStatus == NotReachable) {
+        MyTableView.hidden = YES;
+        _selectionView.hidden = YES;
+        nothingView.hidden = YES;
+    }else if (networkStatus == kReachableViaWiFi){ }else{ }
+}
+-(void)viewWillAppear:(BOOL)animated{
+   
+    if (self.brandNav==YES) {
+        self.tabBarController.tabBar.hidden = YES;
+        [self createBackBtn];
+        
+    }else
+    {
+        self.tabBarController.tabBar.hidden = NO;
+       
+    }
+    [self netExist];
+    [super viewWillAppear:YES];
+    [[self navigationController] setNavigationBarHidden:NO animated:NO];
+    // [self netWork];
+  
+}
+-(void)createBackBtn{
+    UIButton *button = [LJControl backBtn];
+    [button addTarget:self action:@selector(backBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationItem.leftBarButtonItem =bar;
+}
+-(void)backBtnClicked{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [_selectionView reloadSections];
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    if (self.brandNav==YES) {
+        
+        MyTableView.frame = CGRectMake(20, 64, self.view.bounds.size.width-25,self.view.bounds.size.height-64);
+        _selectionView.frame = CGRectMake(0, 0, 30, self.view.bounds.size.height);
+        self.bottomContrain.constant=0;
+      
+        
+    }else
+    {
+    MyTableView.frame = CGRectMake(20, 64, self.view.bounds.size.width-25, self.view.bounds.size.height-64-44);
+    _selectionView.frame = CGRectMake(0, 0, 30, self.view.bounds.size.height-47);
+    }
+}
+
+
+-(void)createTableView{
+    if (UIDeviceHao>=7.0) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }else{
+    }
+    
+    MyTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    MyTableView.delegate = self;
+    MyTableView.dataSource=  self;
+    MyTableView.showsVerticalScrollIndicator=NO;
+    MyTableView.showsHorizontalScrollIndicator = NO;
+    
+    _selectionView = [[CHSectionSelectionView alloc] init];
+    _selectionView.backgroundColor = [UIColor whiteColor];
+    _selectionView.dataSource = self;
+    _selectionView.delegate = self;
+    _selectionView.showCallouts = YES;
+    _selectionView.calloutPadding = 20;
+    [self.view addSubview:_selectionView];
+   
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self netWork];
+    self.navigationController.navigationBar.barTintColor = RGB_COLOR(219,34,46);
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.translucent = NO;
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:19],NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    // Do any additional setup after loading the view from its nib.
+    nothingView.hidden = YES;
+    dateArray = [[NSMutableArray alloc]init];
+    arrayfenzuhangshu = [[NSMutableArray alloc]init];
+    array2 = [[NSMutableArray alloc]init];
+    arrayDic = [[NSMutableArray alloc]init];
+    arrrayTitile = [[NSMutableArray alloc]init];
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self createTableView];
+    self.view.backgroundColor=[UIColor whiteColor];
+    
+}
+
+#pragma mark - 网络
+-(void)urlRequestSucceeded:(ASIFormDataRequest *)request{
+    MyTableView.hidden = NO;
+    _selectionView.hidden = NO;
+    int statuscode2 = [request responseStatusCode];
+    if (statuscode2 == 200) {
+        NSDictionary *dicBig =[NSJSONSerialization JSONObjectWithData:request.responseData options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"品牌列表，，，，%@",dicBig);
+        if (dateArray.count != 0) {
+            [dateArray removeAllObjects];
+        }
+        if (arrayfenzuhangshu.count!=0) {
+            [arrayfenzuhangshu removeAllObjects];
+        }
+        if (arrayDic.count!=0) {
+            [arrayDic removeAllObjects];
+        }
+        if (arrrayTitile.count!=0) {
+            [arrrayTitile removeAllObjects];
+        }
+        
+        NSArray *array = [dicBig objectForKey:@"brand_list"];
+        for (NSDictionary *dic in array) {
+            array2 = [dic objectForKey:@"brand_list"];
+            [arrayfenzuhangshu addObject:[NSString stringWithFormat:@"%lu",(unsigned long)array2.count]];
+            [arrrayTitile addObject:[dic objectForKey:@"word"]];
+            NSMutableArray *arrSub = [[NSMutableArray alloc]init];
+            for(NSDictionary *dic2 in array2){
+                BrandModel *brand = [[BrandModel alloc]init];
+                brand.brand_name = [dic2 objectForKey:@"name"];
+                brand.brand_img = [dic2 objectForKey:@"photo"];
+                brand.brand_id = [dic2 objectForKey:@"id"];
+                [arrSub addObject:brand];
+            }
+            [dateArray addObject:arrSub];
+        }
+    }
+    if (dateArray.count == 0) {
+        MyTableView.hidden = YES;
+        nothingView.hidden = NO;
+    }else{
+        MyTableView.hidden = NO;
+        nothingView.hidden = YES;
+    }
+    [MyTableView reloadData];
+    [SYObject endLoading];
+    [_selectionView reloadSections];
+}
+-(void)urlRequestFailed:(ASIFormDataRequest *)request{
+
+    [SYObject endLoading];
+    [SYObject failedPrompt:@"网络请求失败"];
+    
+    
+}
+#pragma mark - SectionSelectionView DataSource
+
+// Tell the datasource how many sections we have - best is to forward to the tableviews datasource
+-(NSInteger)numberOfSectionsInSectionSelectionView:(CHSectionSelectionView *)sectionSelectionView
+{
+    return [MyTableView.dataSource numberOfSectionsInTableView:MyTableView];
+}
+
+// Create a nice callout view so that you see whats selected when
+// your finger covers the sectionSelectionView
+-(UIView *)sectionSelectionView:(CHSectionSelectionView *)selectionView callOutViewForSelectedSection:(NSInteger)section
+{
+    UILabel *label = [[UILabel alloc] init];
+    
+    label.frame = CGRectMake(0, 0, 80, 80); // you MUST set the size of the callout in this method
+    
+    // do some ui stuff
+    
+    label.backgroundColor = [UIColor whiteColor];
+    label.textColor = [UIColor redColor];
+    label.font = [UIFont boldSystemFontOfSize:40];
+    label.text = [MyTableView.dataSource tableView:MyTableView titleForHeaderInSection:section];
+    label.textAlignment = NSTextAlignmentCenter;
+    
+    // dont use that in your code cause layer shadows are
+    // negatively affecting performance
+    
+    [label.layer setCornerRadius:label.frame.size.width/2];
+    [label.layer setMasksToBounds:YES];
+    [label.layer setBorderColor:[UIColor darkGrayColor].CGColor];
+    [label.layer setBorderWidth:3.0f];
+    [label.layer setShadowColor:[UIColor blackColor].CGColor];
+    //    [label.layer setShadowOpacity:0.8];
+    //    [label.layer setShadowRadius:5.0];
+    //    [label.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
+    
+    return label;
+}
+
+-(CHSectionSelectionItemView *)sectionSelectionView:(CHSectionSelectionView *)selectionView sectionSelectionItemViewForSection:(NSInteger)section
+{
+    DemoSectionItemSubclass *selectionItem = [[DemoSectionItemSubclass alloc] init];
+    
+    selectionItem.titleLabel.text = [MyTableView.dataSource tableView:MyTableView titleForHeaderInSection:section];
+    selectionItem.titleLabel.font = [UIFont systemFontOfSize:12];
+    selectionItem.titleLabel.textColor = [UIColor darkGrayColor];
+    selectionItem.titleLabel.highlightedTextColor = [UIColor redColor];
+    selectionItem.titleLabel.shadowColor = [UIColor whiteColor];
+    selectionItem.titleLabel.shadowOffset = CGSizeMake(0, 1);
+    
+    return selectionItem;
+}
+
+
+#pragma mark - SectionSelectionView Delegate
+
+// Jump to the selected section in our tableview
+-(void)sectionSelectionView:(CHSectionSelectionView *)sectionSelectionView didSelectSection:(NSInteger)section
+{
+    [MyTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+}
+
+#pragma mark - tableView
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [arrrayTitile objectAtIndex:section];
+}
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
+    if (arrayfenzuhangshu.count!=0) {
+        return arrayfenzuhangshu.count;
+    }
+    return 0;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    for(int i=0;i<arrayfenzuhangshu.count;i++){
+        if (section == i) {
+            if ([[arrayfenzuhangshu objectAtIndex:i] intValue]%3==0) {
+                return [[arrayfenzuhangshu objectAtIndex:i] intValue]/3;
+            }else{
+                return [[arrayfenzuhangshu objectAtIndex:i] intValue]/3+1;
+            }
+        }
+    }
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NilCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%ld_%ld", (long)indexPath.section, (long)indexPath.row]];
+    if (cell == nil) {
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"NilCell" owner:self options:nil] lastObject];
+        cell.selectionStyle = UITableViewCellAccessoryNone;
+    }
+    if (dateArray.count != 0) {
+        NSArray *array = [dateArray  objectAtIndex:indexPath.section];
+        if (array.count%3==0) {
+            BrandModel *brand = [array objectAtIndex:3*indexPath.row];
+            
+            UIView *kuang1 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-30-74*3)/4, 5, 74, 71)];
+            [kuang1.layer setMasksToBounds:YES];
+            [kuang1.layer setCornerRadius:18.0f];
+            kuang1.layer.borderWidth = 1;
+            kuang1.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [cell addSubview:kuang1];
+            UIImageView *imgBrand1 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+            [imgBrand1 sd_setImageWithURL:[NSURL URLWithString:brand.brand_img] placeholderImage:[UIImage imageNamed:@"k"]];
+            [kuang1 addSubview:imgBrand1];
+            UILabel *lblBrand1 = [[UILabel alloc]initWithFrame:CGRectMake(15, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+            lblBrand1.text = brand.brand_name;
+            lblBrand1.textAlignment = NSTextAlignmentCenter;
+            lblBrand1.font = [UIFont boldSystemFontOfSize:12];
+            [cell addSubview:lblBrand1];
+            
+            BrandModel *brand2 = [array objectAtIndex:3*indexPath.row+1];
+            UIView *kuang2 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20-74*3)/4*2+71, 5, 74, 71)];
+            [kuang2.layer setMasksToBounds:YES];
+            [kuang2.layer setCornerRadius:18.0f];
+            kuang2.layer.borderWidth = 1;
+            kuang2.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [cell addSubview:kuang2];
+            UIImageView *imgBrand2 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+            [imgBrand2 sd_setImageWithURL:[NSURL URLWithString:brand2.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+            [kuang2 addSubview:imgBrand2];
+            UILabel *lblBrand2 = [[UILabel alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20)/3+5, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+            lblBrand2.text = brand2.brand_name;
+            lblBrand2.font = [UIFont boldSystemFontOfSize:12];
+            lblBrand2.textAlignment = NSTextAlignmentCenter;
+            [cell addSubview:lblBrand2];
+            BrandModel *brand3 = [array objectAtIndex:3*indexPath.row+2];
+            UIView *kuang3 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20-74*3)/4*3+71*2, 5, 74, 71)];
+            [kuang3.layer setMasksToBounds:YES];
+            [kuang3.layer setCornerRadius:18.0f];
+            kuang3.layer.borderWidth = 1;
+            kuang3.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [cell addSubview:kuang3];
+            UIImageView *imgBrand3 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+            [imgBrand3 sd_setImageWithURL:[NSURL URLWithString:brand3.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+            [kuang3 addSubview:imgBrand3];
+            UILabel *lblBrand3 = [[UILabel alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20)/3*2-5, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+            lblBrand3.text = brand3.brand_name;
+            lblBrand3.font = [UIFont boldSystemFontOfSize:12];
+            lblBrand3.textAlignment = NSTextAlignmentCenter;
+            [cell addSubview:lblBrand3];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom ];
+            button.frame =CGRectMake(0, 0, (ScreenFrame.size.width-30)/3, 81);
+            [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = 1000*indexPath.section+3*indexPath.row;
+            [cell addSubview:button];
+            
+            UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom ];
+            button2.frame =CGRectMake((ScreenFrame.size.width-30)/3, 0, (ScreenFrame.size.width-30)/3, 81);
+            [button2 addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+            button2.tag = 1000*indexPath.section+3*indexPath.row+1;
+            [cell addSubview:button2];
+            
+            UIButton *button3 = [UIButton buttonWithType:UIButtonTypeCustom ];
+            button3.frame =CGRectMake((ScreenFrame.size.width-30)/3*2, 0, (ScreenFrame.size.width-30)/3, 81);
+            [button3 addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+            button3.tag = 1000*indexPath.section+3*indexPath.row+2;
+            [cell addSubview:button3];
+        }else if (array.count%3==1) {
+            BrandModel *brand = [array objectAtIndex:3*indexPath.row];
+            UIView *kuang1 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-30-74*3)/4, 5, 74, 71)];
+            [kuang1.layer setMasksToBounds:YES];
+            [kuang1.layer setCornerRadius:18.0f];
+            kuang1.layer.borderWidth = 1;
+            kuang1.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [cell addSubview:kuang1];
+            UIImageView *imgBrand1 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+            [imgBrand1 sd_setImageWithURL:[NSURL URLWithString:brand.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+            [kuang1 addSubview:imgBrand1];
+            UILabel *lblBrand1 = [[UILabel alloc]initWithFrame:CGRectMake(15, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+            lblBrand1.text = brand.brand_name;
+            lblBrand1.textAlignment = NSTextAlignmentCenter;
+            lblBrand1.font = [UIFont boldSystemFontOfSize:12];
+            [cell addSubview:lblBrand1];
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom ];
+            button.frame =CGRectMake(0, 0, (ScreenFrame.size.width-30)/3, 81);
+            [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = 1000*indexPath.section+3*indexPath.row;
+            [cell addSubview:button];
+            
+            if (indexPath.row == array.count/3) {
+                
+            }else{
+                
+                BrandModel *brand2 = [array objectAtIndex:3*indexPath.row+1];
+                UIView *kuang2 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20-74*3)/4*2+71, 5, 74, 71)];
+                [kuang2.layer setMasksToBounds:YES];
+                [kuang2.layer setCornerRadius:18.0f];
+                kuang2.layer.borderWidth = 1;
+                kuang2.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+                [cell addSubview:kuang2];
+                UIImageView *imgBrand2 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+                [imgBrand2 sd_setImageWithURL:[NSURL URLWithString:brand2.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+                [kuang2 addSubview:imgBrand2];
+                UILabel *lblBrand2 = [[UILabel alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20)/3+5, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+                lblBrand2.text = brand2.brand_name;
+                lblBrand2.font = [UIFont boldSystemFontOfSize:12];
+                lblBrand2.textAlignment = NSTextAlignmentCenter;
+                [cell addSubview:lblBrand2];
+                
+                BrandModel *brand3 = [array objectAtIndex:3*indexPath.row+2];
+                UIView *kuang3 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20-74*3)/4*3+71*2, 5, 74, 71)];
+                [kuang3.layer setMasksToBounds:YES];
+                [kuang3.layer setCornerRadius:18.0f];
+                kuang3.layer.borderWidth = 1;
+                kuang3.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+                [cell addSubview:kuang3];
+                UIImageView *imgBrand3 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+                [imgBrand3 sd_setImageWithURL:[NSURL URLWithString:brand3.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+                [kuang3 addSubview:imgBrand3];
+                UILabel *lblBrand3 = [[UILabel alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20)/3*2-5, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+                lblBrand3.text = brand3.brand_name;
+                lblBrand3.font = [UIFont boldSystemFontOfSize:12];
+                lblBrand3.textAlignment = NSTextAlignmentCenter;
+                [cell addSubview:lblBrand3];
+                UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom ];
+                button2.frame =CGRectMake((ScreenFrame.size.width-30)/3, 0, (ScreenFrame.size.width-30)/3, 81);
+                [button2 addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                button2.tag = 1000*indexPath.section+3*indexPath.row+1;
+                [cell addSubview:button2];
+                
+                UIButton *button3 = [UIButton buttonWithType:UIButtonTypeCustom ];
+                button3.frame =CGRectMake((ScreenFrame.size.width-30)/3*2, 0, (ScreenFrame.size.width-30)/3, 81);
+                [button3 addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                button3.tag = 1000*indexPath.section+3*indexPath.row+2;
+                [cell addSubview:button3];
+            }
+        }else if (array.count%3==2) {
+            BrandModel *brand = [array objectAtIndex:3*indexPath.row];
+            UIView *kuang1 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-30-74*3)/4, 5, 74, 71)];
+            [kuang1.layer setMasksToBounds:YES];
+            [kuang1.layer setCornerRadius:18.0f];
+            kuang1.layer.borderWidth = 1;
+            kuang1.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [cell addSubview:kuang1];
+            UIImageView *imgBrand1 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+            [imgBrand1 sd_setImageWithURL:[NSURL URLWithString:brand.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+            [kuang1 addSubview:imgBrand1];
+            UILabel *lblBrand1 = [[UILabel alloc]initWithFrame:CGRectMake(15, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+            lblBrand1.text = brand.brand_name;
+            lblBrand1.textAlignment = NSTextAlignmentCenter;
+            lblBrand1.font = [UIFont boldSystemFontOfSize:12];
+            [cell addSubview:lblBrand1];
+            
+            BrandModel *brand2 = [array objectAtIndex:3*indexPath.row+1];
+            UIView *kuang2 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20-74*3)/4*2+71, 5, 74, 71)];
+            [kuang2.layer setMasksToBounds:YES];
+            [kuang2.layer setCornerRadius:18.0f];
+            kuang2.layer.borderWidth = 1;
+            kuang2.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+            [cell addSubview:kuang2];
+            UIImageView *imgBrand2 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+            [imgBrand2 sd_setImageWithURL:[NSURL URLWithString:brand2.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+            [kuang2 addSubview:imgBrand2];
+            UILabel *lblBrand2 = [[UILabel alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20)/3+5, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+            lblBrand2.text = brand2.brand_name;
+            lblBrand2.font = [UIFont boldSystemFontOfSize:12];
+            lblBrand2.textAlignment = NSTextAlignmentCenter;
+            [cell addSubview:lblBrand2];
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom ];
+            button.frame =CGRectMake(0, 0, (ScreenFrame.size.width-30)/3, 81);
+            [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = 1000*indexPath.section+3*indexPath.row;
+            [cell addSubview:button];
+            UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom ];
+            button2.frame =CGRectMake((ScreenFrame.size.width-30)/3, 0, (ScreenFrame.size.width-30)/3, 81);
+            [button2 addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+            button2.tag = 1000*indexPath.section+3*indexPath.row+1;
+            [cell addSubview:button2];
+            
+            if (indexPath.row == array.count/3) {
+                
+            }else{
+                BrandModel *brand3 = [array objectAtIndex:3*indexPath.row+2];
+                UIView *kuang3 = [[UIView alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20-74*3)/4*3+71*2, 5, 74, 71)];
+                [kuang3.layer setMasksToBounds:YES];
+                [kuang3.layer setCornerRadius:18.0f];
+                kuang3.layer.borderWidth = 1;
+                kuang3.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+                [cell addSubview:kuang3];
+                UIImageView *imgBrand3 = [[UIImageView alloc]initWithFrame:CGRectMake(1.5, (71-33)/2, 71, 33)];
+                [imgBrand3 sd_setImageWithURL:[NSURL URLWithString:brand3.brand_img] placeholderImage:[UIImage imageNamed:@"kong_lj"]];
+                [kuang3 addSubview:imgBrand3];
+                UILabel *lblBrand3 = [[UILabel alloc]initWithFrame:CGRectMake((ScreenFrame.size.width-20)/3*2-5, 85, (ScreenFrame.size.width-20)/3-10, 22)];
+                lblBrand3.text = brand3.brand_name;
+                lblBrand3.font = [UIFont boldSystemFontOfSize:12];
+                lblBrand3.textAlignment = NSTextAlignmentCenter;
+                [cell addSubview:lblBrand3];
+                UIButton *button3 = [UIButton buttonWithType:UIButtonTypeCustom ];
+                button3.frame =CGRectMake((ScreenFrame.size.width-30)/3*2, 0, (ScreenFrame.size.width-30)/3, 81);
+                [button3 addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                button3.tag = 1000*indexPath.section+3*indexPath.row+2;
+                [cell addSubview:button3];
+            }
+        }
+    }
+    return  cell;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 104.0f;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+#pragma mark - 点击事件
+-(BOOL)shouldAutorotate
+{
+    return YES;
+}
+-(IBAction)refreshClicked:(id)sender{
+    MyTableView.hidden = NO;
+    [self netWork];
+}
+-(void)netWork{
+
+    [SYObject startLoading];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",FIRST_URL,BRANDMY_URL]];
+    request_1=[ASIFormDataRequest requestWithURL:url];
+    
+    [request_1 setRequestHeaders:[LJControl requestHeaderDictionary]];
+    request_1.delegate = self;
+    [request_1 setDidFailSelector:@selector(urlRequestFailed:)];
+    [request_1 setDidFinishSelector:@selector(urlRequestSucceeded:)];
+    [request_1 startAsynchronous];
+}
+-(void)btnClicked:(UIButton *)btn{
+    NSArray *array = [dateArray  objectAtIndex:btn.tag/1000];
+    for(int i=0;i<array.count;i++){
+        if (btn.tag == btn.tag/1000*1000+i) {
+            BrandModel *brand = [array objectAtIndex:i];
+            SecondViewController *secB = [SecondViewController sharedUserDefault];
+            secB.sub_id2 = brand.brand_id;
+            secB.sub_title2 = brand.brand_name;
+            
+            BrandGoodListViewController *sec = [[BrandGoodListViewController alloc]init];
+            [self.navigationController pushViewController:sec animated:YES];
+        }
+    }
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc {
+    if ([self isViewLoaded] && self.view.window == nil) {
+        self.view = nil;
+    }
+    shjImageView = nil;
+    dateArray = nil;
+    array2 = nil;
+    arrayfenzuhangshu = nil;
+    arrayDic = nil;
+    arrrayTitile = nil;
+    MyTableView = nil;
+    arr = nil;
+    _selectionView = nil;
+    
+}
+
+@end

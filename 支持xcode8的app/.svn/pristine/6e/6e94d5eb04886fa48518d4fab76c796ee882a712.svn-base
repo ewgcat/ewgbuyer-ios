@@ -1,0 +1,451 @@
+//
+//  SecondViewController.m
+//  My_App
+//
+//  Created by apple on 15/7/7.
+//  Copyright (c) 2015年 apple. All rights reserved.
+//
+
+#import "SecondViewController.h"
+#import "ASIFormDataRequest.h"
+#import "Seconde_sub2ViewController.h"
+#import "SearchViewController.h"
+#import "second0Cell.h"
+#import "second1Cell.h"
+#import "ScanLoginViewController.h"
+#import "FirstViewController.h"
+#import "DetailViewController.h"
+#import "Reachability.h"
+#import "secondCollectionViewCell.h"
+#import "secondCollectionReusableView.h"
+#import "ScanScanViewController.h"
+
+@interface SecondViewController (){
+//    ASIFormDataRequest *request_1;
+//    ASIFormDataRequest *request_3;
+//    
+}
+
+@end
+
+static SecondViewController *singleInstance=nil;
+
+@implementation SecondViewController
+
++(id)sharedUserDefault
+{
+    if(singleInstance==nil)
+    {
+        @synchronized(self)
+        {
+            if(singleInstance==nil)
+            {
+                singleInstance=[[[self class] alloc] init];
+            }
+        }
+    }
+    return singleInstance;
+}
+
++ (id)allocWithZone:(NSZone *)zone;
+{
+    if(singleInstance==nil)
+    {
+        singleInstance=[super allocWithZone:zone];
+    }
+    return singleInstance;
+}
+-(id)copyWithZone:(NSZone *)zone
+{
+    return singleInstance;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self netExist];
+    self.tabBarController.tabBar.hidden = NO;
+    [[self navigationController] setNavigationBarHidden:YES animated:NO];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[self navigationController] setNavigationBarHidden:NO animated:NO];
+}
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:YES];
+}
+-(void)createTableView{
+    if (UIDeviceHao>=7.0) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }else{
+    }
+    MyTableView.delegate = self;
+    MyTableView.dataSource=  self;
+    MyTableView.showsVerticalScrollIndicator=NO;
+    MyTableView.showsHorizontalScrollIndicator = NO;
+    
+}
+
+
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+//    if ([self isViewLoaded] && self.view.window == nil) {
+//        self.view = nil;
+//    }
+//    MyTableView = nil;
+//    dataArray = nil;
+//    dataArraySecond = nil;
+//   
+//    labelTi = nil;
+//    _sub_id = nil;
+//    _sub_id2 = nil;
+//    _sub_title = nil;
+//    _sub_title2 = nil;
+//    _detail_id = nil;
+}
+//-(void)dealloc {
+//    if ([self isViewLoaded] && self.view.window == nil) {
+//        self.view = nil;
+//    }
+//    MyTableView = nil;
+//    dataArray = nil;
+//    dataArraySecond = nil;
+//    labelTi = nil;
+//    _sub_id = nil;
+//    _sub_title = nil;
+//    _sub_id2 = nil;
+//    _sub_title2 = nil;
+//    _detail_id = nil;
+//    _detailweb_title = nil;
+//    _detailweb_details = nil;
+//    _searchKeyword = nil;
+//}
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.view.backgroundColor = [UIColor whiteColor];
+        self.title = @"分类";
+    }
+    return self;
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.navigationController.navigationBar.barTintColor = RGB_COLOR(219,34,46);
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.translucent = NO;
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:19],NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    // Do any additional setup after loading the view from its nib.
+    [searchLabel.layer setMasksToBounds:YES];
+    [searchLabel.layer setCornerRadius:4];
+    _storeAllgoodsBool = NO;
+    My_indexpath = 0;
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    dataArray = [[NSMutableArray alloc]init];
+    dataArraySecond = [[NSMutableArray alloc]init];
+    [self createTableView];
+    
+    [scanBtn addTarget:self action:@selector(QR) forControlEvents:UIControlEventTouchUpInside];
+    [searchBtn addTarget:self action:@selector(search) forControlEvents:UIControlEventTouchUpInside];
+    myBool = NO;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+   
+    [SYObject startLoading];
+    
+    [refreshNetBtn addTarget:self action:@selector(refreshClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self netWork];
+    
+    My_collectionView.backgroundColor = [UIColor whiteColor];
+    [My_collectionView registerClass:[secondCollectionViewCell class] forCellWithReuseIdentifier:@"secondCollectionViewCell"];
+    [My_collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"secondCollectionReusableView"];
+    My_collectionView.delegate = self;
+    My_collectionView.dataSource = self;
+    
+    //代码控制header和footer的显示
+    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)My_collectionView.collectionViewLayout;
+    collectionViewLayout.headerReferenceSize = CGSizeMake(ScreenFrame.size.width, 40);
+}
+
+
+#pragma mark - tabelView方法
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (tableView == MyTableView) {
+        if (dataArray.count!=0) {
+            return dataArray.count;
+        }
+    }
+    
+    return 0;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return 65;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    second0Cell *cell = [MyTableView dequeueReusableCellWithIdentifier:@"second0Cell"];
+    if(cell == nil){
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"second0Cell" owner:self options:nil] lastObject];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    if (indexPath.row == My_indexpath) {
+        cell.backgroundColor = [UIColor whiteColor];
+        cell.name.textColor = RGB_COLOR(195, 82, 86);
+    }else{
+        cell.backgroundColor = _K_Color(238, 242, 244);
+        cell.name.textColor = RGB_COLOR(24, 26, 27);
+    }
+    if (dataArray.count!=0) {
+        ClassifyModel *classify = [dataArray objectAtIndex:indexPath.row];
+        cell.name.text=[NSString stringWithFormat:@"%@",classify.classify_className];
+    }
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    if (tableView == MyTableView) {
+        [dataArraySecond removeAllObjects];
+        [My_collectionView reloadData];
+        [My_collectionView setContentOffset:CGPointMake(0,0) animated:YES];
+        
+        [MyTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        if (dataArray.count!=0) {
+            ClassifyModel *classify = [dataArray objectAtIndex:indexPath.row];
+            [self didselectNetWork:classify.classify_id];
+            My_indexpath = indexPath.row;
+            [MyTableView reloadData];
+        }
+    }
+}
+
+#pragma mark - collectionView delegate
+//设置分区
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    if (dataArraySecond.count!=0) {
+        return dataArraySecond.count;
+    }
+    return 0;
+}
+//每个分区上的元素个数
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    if (collectionView == My_collectionView) {
+        if (dataArraySecond.count!=0) {
+            ClassifyModel *arr = [dataArraySecond objectAtIndex:section];
+            return arr.classify_thirdArray.count;
+        }
+        return 0;
+    }
+    return 0;
+}
+//设置元素内容
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *identify = @"secondCollectionViewCell";
+    secondCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
+    if (cell == nil) {
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"secondCollectionViewCell" owner:self options:nil] lastObject];
+    }
+    if (dataArraySecond.count!=0) {
+        ClassifyModel *classify = [dataArraySecond objectAtIndex:indexPath.section];
+        cell.name.text = [[classify.classify_thirdArray objectAtIndex:indexPath.row] objectForKey:@"className"];
+        
+        [cell.image sd_setImageWithURL:[NSURL URLWithString:[[classify.classify_thirdArray objectAtIndex:indexPath.row] objectForKey:@"icon_path"] ] placeholderImage:[UIImage imageNamed:@""]];
+    }
+    return cell;
+}
+
+//设置元素的的大小框
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    UIEdgeInsets top = {0,(ScreenFrame.size.width-280)/4,15,(ScreenFrame.size.width-280)/4};
+    return top;
+}
+//设置顶部的大小
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+    CGSize size={ScreenFrame.size.width,56};
+    return size;
+}
+//设置元素大小
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return CGSizeMake(60,88);
+}
+//点击元素触发事件
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    if(dataArraySecond.count!=0){
+        ClassifyModel *classify = [dataArraySecond objectAtIndex:indexPath.section];
+        _sub_id2 = [NSString stringWithFormat:@"%@",[[classify.classify_thirdArray objectAtIndex:indexPath.row] objectForKey:@"id"]];
+        _sub_title2 = [NSString stringWithFormat:@"%@",[[classify.classify_thirdArray objectAtIndex:indexPath.row] objectForKey:@"className"]];
+        Seconde_sub2ViewController *sec = [[Seconde_sub2ViewController alloc]init];
+        [self.navigationController pushViewController:sec animated:YES];
+    }
+}
+
+- (UICollectionReusableView *) collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"secondCollectionReusableView" forIndexPath:indexPath];
+    UIView *BigView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenFrame.size.width, 56)];
+    BigView.backgroundColor = [UIColor whiteColor];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, ScreenFrame.size.width, 56)];
+    if (dataArraySecond.count!=0) {
+        ClassifyModel *class = [dataArraySecond objectAtIndex:indexPath.section];
+        label.text = [NSString stringWithFormat:@"%@",class.classify_className];
+    }
+    label.textColor=RGB_COLOR(102, 102, 102);
+    label.font=[UIFont systemFontOfSize:12];
+    [BigView addSubview:label];
+    [reusableview addSubview:BigView];
+    return reusableview;
+}
+
+#pragma mark - 点击事件
+-(void)refreshClicked{
+    MyTableView.hidden = NO;
+    [self netWork];
+}
+
+
+-(void)search{
+    SearchViewController *ordrt = [[SearchViewController alloc]init];
+    [self.navigationController pushViewController:ordrt animated:YES];
+}
+#pragma mark - 网络
+-(void)netExist{
+    NetworkStatus networkStatus = [Reachability reachabilityForInternetConnection].currentReachabilityStatus;
+    if (networkStatus == NotReachable) {
+        MyTableView.hidden = YES;
+        My_collectionView.hidden = YES;
+    }else if (networkStatus == kReachableViaWiFi){
+        MyTableView.hidden = NO;
+        My_collectionView.hidden = NO;
+    }else{
+        MyTableView.hidden = NO;
+        My_collectionView.hidden = NO;
+    }
+}
+-(void)RequestClassASucceeded:(NSDictionary *)dic{
+  
+        if (dataArray.count!=0) {
+            [dataArray removeAllObjects];
+        }
+    
+    NSMutableArray *mlhdataArray = [[NSMutableArray alloc]init];
+
+    NSDictionary *dicBig =dic;
+    if ([[dicBig objectForKey:@"ret"] isEqualToString:@"false"]) {
+    }else{
+        NSArray *array = [dicBig objectForKey:@"goodsclass_list"];
+        for(NSDictionary *dic in array){
+            ClassifyModel *classify = [[ClassifyModel alloc]init];
+            classify.classify_className = [dic objectForKey:@"className"];
+            classify.classify_icon_path = [dic objectForKey:@"icon_path"];
+            classify.classify_id = [dic objectForKey:@"id"];
+            classify.classify_children =[dic objectForKey:@"recommend_children"];
+            [mlhdataArray addObject:classify];
+        }
+    }
+    dataArray =mlhdataArray;
+        [MyTableView reloadData];
+   
+    if (dataArray.count!=0) {
+        ClassifyModel *classify2 = [dataArray objectAtIndex:0];
+        [self didselectNetWork:classify2.classify_id];
+    }
+}
+-(void)didselectNetWork:(NSString *)classify_id{
+//    NSArray *keyArr = [[NSArray alloc]initWithObjects:@"id", nil];
+//    NSArray *valueArr = [[NSArray alloc]initWithObjects:classify_id, nil];
+//    request_1 = [consultViewNetwork startRequest_url:[NSString stringWithFormat:@"%@%@",FIRST_URL,CLASSIFY_SUB_URL] setKey:keyArr setValue:valueArr];
+//    
+//    request_1.delegate = self;
+//    [request_1 setDidFailSelector:@selector(urlRequestFailed:)];
+//    [request_1 setDidFinishSelector:@selector(RequestSecondLevelSucceeded:)];
+//    [request_1 startAsynchronous];
+    
+    NSString *urlStr = [NSString stringWithFormat:@"%@%@",FIRST_URL,CLASSIFY_SUB_URL];
+    NSDictionary *par = @{@"id":classify_id };
+    __weak typeof(self) ws=self;
+    [[Requester managerWithHeader]POST:urlStr parameters:par success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [ws RequestSecondLevelSucceeded:responseObject];
+       
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+        [SYObject endLoading];
+        [SYObject failedPrompt:@"网络请求失败"];
+        NSLog(@"\n\n***错误信息:***\n*类名:%@*\n*方法名:%s*\n*行数:%d*\n\n",NSStringFromClass([self class]),__func__,__LINE__);
+    }];
+    
+    
+}
+-(void)urlRequestFailed:(ASIFormDataRequest *)request{
+    [SYObject endLoading];
+    [SYObject failedPrompt:@"网络请求失败"];
+}
+
+-(void)RequestSecondLevelSucceeded:(NSDictionary *)dic{
+    
+        if (dataArraySecond.count!=0) {
+            [dataArraySecond removeAllObjects];
+        }
+    
+    NSMutableArray *Mlh_dataArray = [[NSMutableArray alloc]init];
+    NSDictionary *dicBig =dic;
+    if ([[dicBig objectForKey:@"ret"] isEqualToString:@"false"]) {
+    }else{
+        NSArray *array = [dicBig objectForKey:@"goodsclass_list"];
+        for(NSDictionary *dic in array){
+            ClassifyModel *classify = [[ClassifyModel alloc]init];
+            classify.classify_className = [dic objectForKey:@"className"];
+            classify.classify_id = [dic objectForKey:@"id"];
+            classify.classify_thirdArray = [dic objectForKey:@"third"];
+            [Mlh_dataArray addObject:classify];
+        }
+    }
+
+    dataArraySecond =Mlh_dataArray;
+    [My_collectionView reloadData];
+    [SYObject endLoading];
+}
+
+-(void)netWork{
+    [SYObject startLoading];
+    
+//    NSArray *keyArr = [[NSArray alloc]initWithObjects:@"", nil];
+//    NSArray *valueArr = [[NSArray alloc]initWithObjects:@"", nil];
+//    request_3 = [consultViewNetwork startRequest_url:[NSString stringWithFormat:@"%@%@",FIRST_URL,CLASSIFY_SUB_URL] setKey:keyArr setValue:valueArr];
+//    
+//    request_3.delegate = self;
+//    [request_3 setDidFailSelector:@selector(urlRequestFailed:)];
+//    [request_3 setDidFinishSelector:@selector(RequestClassASucceeded:)];
+//    [request_3 startAsynchronous];
+    
+    NSString *urlStr=[NSString stringWithFormat:@"%@%@",FIRST_URL,CLASSIFY_SUB_URL];
+    __weak typeof (self) ws=self;
+    [[Requester managerWithHeader]POST:urlStr parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [ws RequestClassASucceeded:responseObject];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+        [SYObject endLoading];
+        [SYObject failedPrompt:@"网络请求失败"];
+        NSLog(@"\n\n***错误信息:***\n*类名:%@*\n*方法名:%s*\n*行数:%d*\n\n",NSStringFromClass([self class]),__func__,__LINE__);
+    }];
+    
+    
+    My_indexpath = 0;
+    
+}
+
+#pragma mark - 二维码扫描相关
+-(void)QR{
+    
+    ScanScanViewController *s = [ScanScanViewController new];
+    [self.navigationController pushViewController:s animated:NO];
+    
+}
+@end

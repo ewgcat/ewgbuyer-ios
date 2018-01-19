@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CouponsViewController">
+            <connections>
+                <outlet property="ShjTableView" destination="cTm-0W-Y0x" id="UVt-rJ-Mmu"/>
+                <outlet property="nothingImage" destination="tw8-oZ-atq" id="paq-NP-Wd6"/>
+                <outlet property="nothingLabel" destination="XIm-Gy-xS0" id="xWT-nK-RnH"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="1VD-pq-Hfi"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="seller_center_nothing.png" translatesAutoresizingMaskIntoConstraints="NO" id="tw8-oZ-atq">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="XcB-AH-Wu5"/>
+                        <constraint firstAttribute="width" constant="100" id="eIY-s4-t3H">
+                            <variation key="heightClass=regular-widthClass=compact" constant="263"/>
+                        </constraint>
+                        <constraint firstAttribute="height" constant="100" id="hTB-TO-vVC">
+                            <variation key="heightClass=regular-widthClass=compact" constant="263"/>
+                        </constraint>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="XcB-AH-Wu5"/>
+                            <exclude reference="eIY-s4-t3H"/>
+                            <exclude reference="hTB-TO-vVC"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <exclude reference="XcB-AH-Wu5"/>
+                            <include reference="eIY-s4-t3H"/>
+                            <include reference="hTB-TO-vVC"/>
+                        </mask>
+                    </variation>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="抱歉，暂无优惠券" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XIm-Gy-xS0">
+                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="8YX-iY-Dyo">
+                            <variation key="heightClass=regular-widthClass=compact" constant="30"/>
+                        </constraint>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="8YX-iY-Dyo"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="8YX-iY-Dyo"/>
+                        </mask>
+                    </variation>
+                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="cTm-0W-Y0x">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="780"/>
+                    </variation>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="XIm-Gy-xS0" secondAttribute="trailing" id="NCX-NV-bSp"/>
+                <constraint firstItem="tw8-oZ-atq" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="RW2-X4-vgv"/>
+                <constraint firstItem="XIm-Gy-xS0" firstAttribute="top" secondItem="tw8-oZ-atq" secondAttribute="bottom" constant="300" id="a4o-43-n9Z">
+                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="XIm-Gy-xS0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="euh-PF-Y84"/>
+                <constraint firstItem="tw8-oZ-atq" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="f5y-6Y-Csz"/>
+                <constraint firstItem="tw8-oZ-atq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="26" id="jH2-Kn-Tu7"/>
+                <constraint firstAttribute="centerX" secondItem="tw8-oZ-atq" secondAttribute="centerX" id="lUW-AJ-dsr"/>
+                <constraint firstItem="tw8-oZ-atq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="170" id="oaK-Jq-gsd"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="tw8-oZ-atq"/>
+                    <exclude reference="XIm-Gy-xS0"/>
+                    <exclude reference="cTm-0W-Y0x"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="NCX-NV-bSp"/>
+                    <exclude reference="a4o-43-n9Z"/>
+                    <exclude reference="euh-PF-Y84"/>
+                    <exclude reference="RW2-X4-vgv"/>
+                    <exclude reference="f5y-6Y-Csz"/>
+                    <exclude reference="jH2-Kn-Tu7"/>
+                    <exclude reference="lUW-AJ-dsr"/>
+                    <exclude reference="oaK-Jq-gsd"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="tw8-oZ-atq"/>
+                    <include reference="XIm-Gy-xS0"/>
+                    <include reference="cTm-0W-Y0x"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="NCX-NV-bSp"/>
+                    <include reference="a4o-43-n9Z"/>
+                    <include reference="euh-PF-Y84"/>
+                    <include reference="RW2-X4-vgv"/>
+                    <include reference="f5y-6Y-Csz"/>
+                    <exclude reference="jH2-Kn-Tu7"/>
+                    <exclude reference="lUW-AJ-dsr"/>
+                    <exclude reference="oaK-Jq-gsd"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="270" y="435"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="seller_center_nothing.png" width="314" height="314"/>
+    </resources>
+</document>
